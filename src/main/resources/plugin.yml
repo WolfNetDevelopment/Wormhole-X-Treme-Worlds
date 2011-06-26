@@ -1,5 +1,5 @@
 name: WormholeXTremeWorlds
-main: de.luricos.bukkit.worlds.WormholeXTremeWorlds
+main: de.luricos.bukkit.WormholeXTremeWorlds
 version: 0.5
 author: alron
 softdepend: [Permissions, Help]
