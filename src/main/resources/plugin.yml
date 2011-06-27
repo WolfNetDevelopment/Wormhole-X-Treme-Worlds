@@ -1,5 +1,5 @@
 name: WormholeXTremeWorlds
-main: com.wormhole_xtreme.worlds.WormholeXTremeWorlds
+main: de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds
 version: 0.5
 author: alron
 softdepend: [Permissions, Help]
