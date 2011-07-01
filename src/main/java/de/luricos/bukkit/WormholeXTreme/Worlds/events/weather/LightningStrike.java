@@ -23,7 +23,7 @@ package de.luricos.bukkit.WormholeXTreme.Worlds.events.weather;
  * 
  * @author alron
  */
-class LightningStrike {
+public class LightningStrike {
 
     /**
      * Handle lightning strike.
@@ -32,7 +32,7 @@ class LightningStrike {
      *            the world name
      * @return true, if successful
      */
-    static boolean handleLightningStrike(final String worldName) {
+    public static boolean handleLightningStrike(final String worldName) {
         return false;
     }
 }

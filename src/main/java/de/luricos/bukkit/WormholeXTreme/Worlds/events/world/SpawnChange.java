@@ -28,7 +28,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class SpawnChange {
+public class SpawnChange {
 
     /**
      * Handle spawn change.
@@ -37,7 +37,7 @@ class SpawnChange {
      *            the world
      * @return true, if successful
      */
-    static boolean handleSpawnChange(final World world) {
+    public static boolean handleSpawnChange(final World world) {
         final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(world);
         if (wormholeWorld != null) {
             if ((wormholeWorld.getWorldSpawn() != null) && !wormholeWorld.getWorldSpawn().equals(world.getSpawnLocation())) {

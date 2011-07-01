@@ -29,7 +29,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class BlockIgnite {
+public class BlockIgnite {
 
     /**
      * Handle block ignite.
@@ -44,20 +44,19 @@ class BlockIgnite {
         final String worldName = block.getWorld().getName();
         if (WorldManager.isWormholeWorld(worldName)) {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
-            if ( !wormholeWorld.isWorldAllowFire()) {
+            if (!wormholeWorld.isWorldAllowFire()) {
                 return true;
-            }
-            else if (igniteCause != null) {
+            } else if (igniteCause != null) {
                 switch (igniteCause) {
-                    case LAVA :
+                    case LAVA:
                         return wormholeWorld.isWorldAllowLavaFire() ? false : true;
-                    case SPREAD :
+                    case SPREAD:
                         return wormholeWorld.isWorldAllowFireSpread() ? false : true;
-                    case LIGHTNING :
+                    case LIGHTNING:
                         return wormholeWorld.isWorldAllowLightningFire() ? false : true;
-                    case FLINT_AND_STEEL :
+                    case FLINT_AND_STEEL:
                         return wormholeWorld.isWorldAllowPlayerStartFire() ? false : true;
-                    default :
+                    default:
                         break;
                 }
             }

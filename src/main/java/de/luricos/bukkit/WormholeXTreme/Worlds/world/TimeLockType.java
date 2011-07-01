@@ -28,21 +28,17 @@ import java.util.Map;
  * @author alron
  */
 public enum TimeLockType {
+
     /** No specific time. */
     NONE(0),
-
     /** Day. */
     DAY(1),
-
     /** Night. */
     NIGHT(2);
-
     /** The id. */
     private final int id;
-
     /** The Constant lookupId. */
     private static final Map<Integer, TimeLockType> lookupId = new HashMap<Integer, TimeLockType>();
-
     /** The Constant lookupName. */
     private static final Map<String, TimeLockType> lookupName = new HashMap<String, TimeLockType>();
 

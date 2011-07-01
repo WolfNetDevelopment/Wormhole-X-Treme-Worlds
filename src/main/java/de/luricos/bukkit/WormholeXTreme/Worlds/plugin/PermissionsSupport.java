@@ -36,7 +36,6 @@ public class PermissionsSupport {
 
     /** The Constant thisPlugin. */
     private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /** The Constant pluginManager. */
     private static final PluginManager pluginManager = WormholeXTremeWorlds.getThisPlugin().getServer().getPluginManager();
 
@@ -61,23 +60,20 @@ public class PermissionsSupport {
                 final Plugin test = pluginManager.getPlugin("Permissions");
                 if (test != null) {
                     final String version = test.getDescription().getVersion();
-                    if ( !version.startsWith("2.5") && !version.startsWith("2.6") && !version.startsWith("2.7") && !version.startsWith("3.0")) {
+                    if (!version.startsWith("2.5") && !version.startsWith("2.6") && !version.startsWith("2.7") && !version.startsWith("3.0")) {
                         thisPlugin.prettyLog(Level.WARNING, false, "Not a supported version of Permissions. Recommended is 3.0.x");
                     }
                     try {
                         PluginSupport.setPermissionHandler(((Permissions) test).getHandler());
                         thisPlugin.prettyLog(Level.INFO, false, "Attached to Permissions version " + version);
-                    }
-                    catch (final ClassCastException e) {
+                    } catch (final ClassCastException e) {
                         thisPlugin.prettyLog(Level.WARNING, false, "Failed to get cast to Permissions: " + e.getMessage());
                     }
-                }
-                else {
+                } else {
                     thisPlugin.prettyLog(Level.INFO, false, "Permission Plugin not yet available.");
                 }
             }
-        }
-        else {
+        } else {
             thisPlugin.prettyLog(Level.INFO, false, "Permission Plugin support disabled via config.xml");
         }
     }

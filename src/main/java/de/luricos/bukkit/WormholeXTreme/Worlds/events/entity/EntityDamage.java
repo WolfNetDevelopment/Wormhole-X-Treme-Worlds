@@ -31,7 +31,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class EntityDamage {
+public class EntityDamage {
 
     /**
      * Handle entity damage.
@@ -44,39 +44,38 @@ class EntityDamage {
      *            the damager
      * @return true, if successful
      */
-    static boolean handleEntityDamage(final Player player, final DamageCause cause, final Entity damager) {
+    public static boolean handleEntityDamage(final Player player, final DamageCause cause, final Entity damager) {
         final WormholeWorld wormholeWorld = WorldManager.getWorldFromPlayer(player);
         if ((wormholeWorld != null)) {
-            if ( !wormholeWorld.isPlayerAllowDamage()) {
+            if (!wormholeWorld.isPlayerAllowDamage()) {
                 playerStopFire(player);
                 playerStopDrown(player);
                 return true;
-            }
-            else if (cause != null) {
+            } else if (cause != null) {
                 switch (cause) {
-                    case CONTACT :
+                    case CONTACT:
                         return wormholeWorld.isPlayerAllowContactDamage() ? false : true;
-                    case ENTITY_ATTACK :
+                    case ENTITY_ATTACK:
                         return wormholeWorld.isWorldAllowPvP() ? false : playerStopPvP(damager);
-                    case SUFFOCATION :
+                    case SUFFOCATION:
                         return wormholeWorld.isPlayerAllowSuffocation() ? false : true;
-                    case FALL :
+                    case FALL:
                         return wormholeWorld.isPlayerAllowFallDamage() ? false : true;
-                    case FIRE :
-                    case FIRE_TICK :
+                    case FIRE:
+                    case FIRE_TICK:
                         return wormholeWorld.isPlayerAllowFireDamage() ? false : playerStopFire(player);
-                    case LAVA :
+                    case LAVA:
                         return wormholeWorld.isPlayerAllowLavaDamage() ? false : playerStopFire(player);
-                    case DROWNING :
+                    case DROWNING:
                         return wormholeWorld.isPlayerAllowDrown() ? false : playerStopDrown(player);
-                    case BLOCK_EXPLOSION :
-                    case ENTITY_EXPLOSION :
+                    case BLOCK_EXPLOSION:
+                    case ENTITY_EXPLOSION:
                         return wormholeWorld.isPlayerAllowExplosionDamage() ? false : true;
-                    case VOID :
+                    case VOID:
                         return wormholeWorld.isPlayerAllowVoidDamage() ? false : true;
-                    case LIGHTNING :
+                    case LIGHTNING:
                         return wormholeWorld.isPlayerAllowLightningDamage() ? false : playerStopFire(player);
-                    default :
+                    default:
                         break;
                 }
             }

@@ -26,7 +26,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class WorldLoad {
+public class WorldLoad {
 
     /**
      * Handle world load.
@@ -35,7 +35,7 @@ class WorldLoad {
      *            the world name
      * @return true, if successful
      */
-    static boolean handleWorldLoad(final String worldName) {
+    public static boolean handleWorldLoad(final String worldName) {
         if (WorldManager.isWormholeWorld(worldName)) {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
             return wormholeWorld.isWorldLoaded() ? false : WorldManager.loadWorld(wormholeWorld);

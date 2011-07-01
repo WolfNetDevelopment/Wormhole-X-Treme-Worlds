@@ -44,7 +44,7 @@ public class WorldEventHandler extends WorldListener {
      */
     @Override
     public void onChunkUnload(final ChunkUnloadEvent event) {
-        if ( !event.isCancelled() && (event.getChunk() != null) && ChunkUnload.handleChunkUnload(event.getChunk())) {
+        if (!event.isCancelled() && (event.getChunk() != null) && ChunkUnload.handleChunkUnload(event.getChunk())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Chunk Unload Cancelled: " + event.getChunk().toString() + " World: " + event.getWorld().getName());
         }

@@ -18,22 +18,24 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import de.luricos.bukkit.WormholeXTreme.Worlds.command.CommandUtilities;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.EventUtilities;
 import de.luricos.bukkit.WormholeXTreme.Worlds.handler.WorldHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.HelpSupport;
-import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PermissionsSupport;
+import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
 import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
 import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction.ActionType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
+
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Class WormholeXTremeWorlds.
@@ -42,18 +44,12 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
  */
 public class WormholeXTremeWorlds extends JavaPlugin {
 
-    /** this plugin. */
-    private static WormholeXTremeWorlds thisPlugin = null;
-
     /** this logger. */
     private static Logger thisLogger = null;
-
     /** The scheduler. */
     private static BukkitScheduler scheduler = null;
-
     /** The time schedule id. */
     private static int timeScheduleId = -1;
-
     /** The world handler. */
     private static WorldHandler worldHandler = null;
 
@@ -81,7 +77,12 @@ public class WormholeXTremeWorlds extends JavaPlugin {
      * @return This plugin
      */
     public static WormholeXTremeWorlds getThisPlugin() {
-        return thisPlugin;
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WormholeXTremeWorlds");
+        if (plugin == null || !(plugin instanceof WormholeXTremeWorlds)) {
+            throw new RuntimeException("'WormholeXTremeWorlds' not found. 'WormholeXTremeWorlds' plugin disabled?");
+        }
+
+        return ((WormholeXTremeWorlds) plugin);
     }
 
     /**
@@ -123,16 +124,6 @@ public class WormholeXTremeWorlds extends JavaPlugin {
     }
 
     /**
-     * Sets this plugin.
-     * 
-     * @param thisPlugin
-     *            The new plugin
-     */
-    private static void setThisPlugin(final WormholeXTremeWorlds thisPlugin) {
-        WormholeXTremeWorlds.thisPlugin = thisPlugin;
-    }
-
-    /**
      * Sets the time schedule id.
      * 
      * @param timeScheduleId
@@ -153,17 +144,17 @@ public class WormholeXTremeWorlds extends JavaPlugin {
     }
 
     /* (non-Javadoc)
-     * @see org.bukkit.plugin.Plugin#onDisable()
+     * @see org.bukkit.plugin.java.JavaPlugin#onLoad()
      */
     @Override
-    public void onDisable() {
-        if (getTimeScheduleId() > 0) {
-            scheduler.cancelTask(getTimeScheduleId());
-        }
-        XMLConfig.saveXmlConfig(getThisPlugin().getDescription());
-        prettyLog(Level.INFO, true, "Successfully shutdown.");
-    }
-
+    public void onLoad() {
+        setThisLogger(this.getServer().getLogger());
+        setScheduler(this.getServer().getScheduler());
+        prettyLog(Level.INFO, true, "Load Beginning.");
+        XMLConfig.loadXmlConfig(this.getDescription());
+        prettyLog(Level.INFO, true, "Load Completed.");
+    }    
+    
     /* (non-Javadoc)
      * @see org.bukkit.plugin.Plugin#onEnable()
      */
@@ -171,36 +162,40 @@ public class WormholeXTremeWorlds extends JavaPlugin {
     public void onEnable() {
         prettyLog(Level.INFO, true, "Enable Beginning.");
         EventUtilities.registerEvents();
-        PermissionsSupport.enablePermissions();
-        HelpSupport.enableHelp();
+        
+        PluginSupport.enableSupportedPlugins();
+        
         CommandUtilities.registerCommands();
         HelpSupport.registerHelpCommands();
-        if (ConfigManager.getServerOptionTimelock()) {
-            setTimeScheduleId(scheduler.scheduleSyncRepeatingTask(thisPlugin, new ScheduleAction(ActionType.TimeLock), 0, 200));
-        }
-        else {
-            prettyLog(Level.INFO, false, "Timelock scheduler disabled, per config.xml directive.");
-        }
-        prettyLog(Level.INFO, true, "Enable Completed.");
-    }
-
-    /* (non-Javadoc)
-     * @see org.bukkit.plugin.java.JavaPlugin#onLoad()
-     */
-    @Override
-    public void onLoad() {
-        setThisPlugin(this);
-        setThisLogger(getThisPlugin().getServer().getLogger());
-        setScheduler(getThisPlugin().getServer().getScheduler());
-        prettyLog(Level.INFO, true, "Load Beginning.");
-        XMLConfig.loadXmlConfig(getThisPlugin().getDescription());
+        
         final int loaded = WorldManager.loadAutoloadWorlds();
         if (loaded > 0) {
             prettyLog(Level.INFO, false, "Auto-loaded " + loaded + (loaded > 1 ? " worlds." : " world."));
         }
-        setWorldHandler(new WorldHandler());
-        prettyLog(Level.INFO, true, "Load Completed.");
+        setWorldHandler(new WorldHandler());        
+        
+        if (ConfigManager.getServerOptionTimelock()) {
+            setTimeScheduleId(scheduler.scheduleSyncRepeatingTask(this, new ScheduleAction(ActionType.TimeLock), 0, 200));
+        } else {
+            prettyLog(Level.INFO, false, "Timelock scheduler disabled, per config.xml directive.");
+        }
+        prettyLog(Level.INFO, true, "Enable Completed.");
     }
+    
+    /* (non-Javadoc)
+     * @see org.bukkit.plugin.Plugin#onDisable()
+     */
+    @Override
+    public void onDisable() {
+        if (getTimeScheduleId() > 0) {
+            scheduler.cancelTask(getTimeScheduleId());
+        }
+        XMLConfig.saveXmlConfig(this.getDescription());
+        
+        PluginSupport.disableSupportedPlugins();
+        
+        prettyLog(Level.INFO, true, "Successfully shut down iteself and unlinked supported plugins.");
+    }    
 
     /**
      * 
@@ -215,14 +210,13 @@ public class WormholeXTremeWorlds extends JavaPlugin {
      * 
      */
     public void prettyLog(final Level severity, final boolean version, final String message) {
-        final String prettyName = ("[" + getThisPlugin().getDescription().getName() + "]");
-        final String prettyVersion = ("[v" + getThisPlugin().getDescription().getVersion() + "]");
+        final String prettyName = ("[" + this.getDescription().getName() + "]");
+        final String prettyVersion = ("[v" + this.getDescription().getVersion() + "]");
         String prettyLogLine = prettyName;
         if (version) {
             prettyLogLine += prettyVersion;
             getThisLogger().log(severity, prettyLogLine + " " + message);
-        }
-        else {
+        } else {
             getThisLogger().log(severity, prettyLogLine + " " + message);
         }
     }

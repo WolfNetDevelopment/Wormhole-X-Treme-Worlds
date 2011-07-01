@@ -28,7 +28,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class ChunkUnload {
+public class ChunkUnload {
 
     /**
      * Handle chunk unload.
@@ -37,7 +37,7 @@ class ChunkUnload {
      *            the chunk
      * @return true, if successful
      */
-    static boolean handleChunkUnload(final Chunk chunk) {
+    public static boolean handleChunkUnload(final Chunk chunk) {
         if (WorldManager.isWormholeWorld(chunk.getWorld())) {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(chunk.getWorld());
             return wormholeWorld.isWorldStickyChunk(chunk);

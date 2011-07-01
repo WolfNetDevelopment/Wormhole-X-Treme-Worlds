@@ -43,7 +43,7 @@ public class WeatherEventHandler extends WeatherListener {
     @Override
     public void onLightningStrike(final LightningStrikeEvent event) {
         thisPlugin.prettyLog(Level.FINE, false, "Lightning Strike caught on world: " + event.getWorld().getName());
-        if ( !event.isCancelled() && LightningStrike.handleLightningStrike(event.getWorld().getName())) {
+        if (!event.isCancelled() && LightningStrike.handleLightningStrike(event.getWorld().getName())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Lightning Strike cancelled on world: " + event.getWorld().getName());
         }
@@ -55,7 +55,7 @@ public class WeatherEventHandler extends WeatherListener {
     @Override
     public void onThunderChange(final ThunderChangeEvent event) {
         thisPlugin.prettyLog(Level.FINE, false, "Thunder Change caught on world: " + event.getWorld().getName() + " state: " + event.toThunderState());
-        if ( !event.isCancelled() && ThunderChange.handleThunderChange(event.getWorld().getName(), event.toThunderState())) {
+        if (!event.isCancelled() && ThunderChange.handleThunderChange(event.getWorld().getName(), event.toThunderState())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Thunder Change cancelled on world: " + event.getWorld().getName());
         }
@@ -67,7 +67,7 @@ public class WeatherEventHandler extends WeatherListener {
     @Override
     public void onWeatherChange(final WeatherChangeEvent event) {
         thisPlugin.prettyLog(Level.FINE, false, "Weather Change caught on world: " + event.getWorld().getName() + " state: " + event.toWeatherState());
-        if ( !event.isCancelled() && WeatherChange.handleWeatherChange(event.getWorld().getName(), event.toWeatherState())) {
+        if (!event.isCancelled() && WeatherChange.handleWeatherChange(event.getWorld().getName(), event.toWeatherState())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Weather Change cancelled on world: " + event.getWorld().getName());
         }

@@ -48,7 +48,6 @@ public class WorldManager {
 
     /** The world list. */
     private final static ConcurrentHashMap<String, WormholeWorld> worldList = new ConcurrentHashMap<String, WormholeWorld>();
-
     /** The Constant thisPlugin. */
     private final static WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
 
@@ -64,8 +63,7 @@ public class WorldManager {
             try {
                 worldList.put(wormholeWorld.getWorldName(), wormholeWorld);
                 return true;
-            }
-            catch (final NullPointerException e) {
+            } catch (final NullPointerException e) {
                 return false;
             }
         }
@@ -172,14 +170,13 @@ public class WorldManager {
                 if (key != null) {
                     final WormholeWorld wormholeWorld = worldList.get(key);
                     if ((wormholeWorld != null) && wormholeWorld.isWorldLoaded() && wormholeWorld.isWorldTimeLock()) {
-                        final long worldRelativeTime = wormholeWorld.getThisWorld().getTime() % 24000;
+                        final long worldRelativeTime = wormholeWorld.getWorld().getTime() % 24000;
                         if ((worldRelativeTime > 11800) && (wormholeWorld.getWorldTimeLockType() == TimeLockType.DAY)) {
                             thisPlugin.prettyLog(Level.FINE, false, "Set world: " + key + " New time: 0" + " Old Time: " + worldRelativeTime);
-                            wormholeWorld.getThisWorld().setTime(0);
-                        }
-                        else if (((worldRelativeTime < 13500) || (worldRelativeTime > 21800)) && (wormholeWorld.getWorldTimeLockType() == TimeLockType.NIGHT)) {
+                            wormholeWorld.getWorld().setTime(0);
+                        } else if (((worldRelativeTime < 13500) || (worldRelativeTime > 21800)) && (wormholeWorld.getWorldTimeLockType() == TimeLockType.NIGHT)) {
                             thisPlugin.prettyLog(Level.FINE, false, "Set world: " + key + " New time: 13700" + " Old Time: " + worldRelativeTime);
-                            wormholeWorld.getThisWorld().setTime(13700);
+                            wormholeWorld.getWorld().setTime(13700);
                         }
                     }
                 }
@@ -196,11 +193,11 @@ public class WorldManager {
      */
     public static int clearWorldCreatures(final WormholeWorld wormholeWorld) {
         int cleared = 0;
-        if ( !wormholeWorld.isWorldAllowSpawnHostiles() || !wormholeWorld.isWorldAllowSpawnNeutrals()) {
-            final List<LivingEntity> entityList = wormholeWorld.getThisWorld().getLivingEntities();
+        if (!wormholeWorld.isWorldAllowSpawnHostiles() || !wormholeWorld.isWorldAllowSpawnNeutrals()) {
+            final List<LivingEntity> entityList = wormholeWorld.getWorld().getLivingEntities();
 
             for (final LivingEntity entity : entityList) {
-                if (( !wormholeWorld.isWorldAllowSpawnHostiles() && ((entity instanceof Monster) || (entity instanceof Flying))) || ( !wormholeWorld.isWorldAllowSpawnNeutrals() && ((entity instanceof Animals) || (entity instanceof WaterMob)))) {
+                if ((!wormholeWorld.isWorldAllowSpawnHostiles() && ((entity instanceof Monster) || (entity instanceof Flying))) || (!wormholeWorld.isWorldAllowSpawnNeutrals() && ((entity instanceof Animals) || (entity instanceof WaterMob)))) {
                     thisPlugin.prettyLog(Level.FINE, false, "Removed entity: " + entity);
                     entity.remove();
                     cleared++;
@@ -214,8 +211,22 @@ public class WorldManager {
     private static void createDefaultWorld() {
         final WormholeWorld wormholeWorld = new WormholeWorld();
         final World world = WormholeXTremeWorlds.getThisPlugin().getServer().getWorlds().get(0);
+        
         wormholeWorld.setWorldName(world.getName());
-        wormholeWorld.setWorldTypeNether(world.getEnvironment() == Environment.NETHER ? true : false);
+
+        // set worldType
+        switch (world.getEnvironment()) {
+            case NORMAL:
+                wormholeWorld.setWorldTypeNormal(true);
+                break;
+            case NETHER:
+                wormholeWorld.setWorldTypeNether(true);
+                break;
+            case SKYLANDS:
+                wormholeWorld.setWorldTypeSkylands(true);
+                break;
+        }
+        
         createWormholeWorld(wormholeWorld);
         thisPlugin.prettyLog(Level.INFO, false, "Added default world as wormhole world.");
     }
@@ -229,36 +240,37 @@ public class WorldManager {
      */
     public static boolean createWormholeWorld(final WormholeWorld wormholeWorld) {
         if ((wormholeWorld != null) && !isWormholeWorld(wormholeWorld.getWorldName())) {
-            wormholeWorld.setWorldLoaded(true);
             final String worldName = wormholeWorld.getWorldName();
-            final Environment worldEnvironment = wormholeWorld.isWorldTypeNether() ? Environment.NETHER
-                : Environment.NORMAL;
-
+            final Environment worldEnvironment = wormholeWorld.getWorldEnvironment();
+            
+            if ("".equals(worldName)) {
+                return false;
+            }
+            
             if (thisPlugin.getServer().getWorld(worldName) == null) {
                 if (wormholeWorld.getWorldSeed() != 0) {
-                    wormholeWorld.setThisWorld(thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment, wormholeWorld.getWorldSeed()));
+                    wormholeWorld.setWorld(thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment, wormholeWorld.getWorldSeed()));
+                } else {
+                    wormholeWorld.setWorld(thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment));
+                    wormholeWorld.setWorldSeed(wormholeWorld.getWorld().getSeed());
                 }
-                else {
-                    wormholeWorld.setThisWorld(thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment));
-                    wormholeWorld.setWorldSeed(wormholeWorld.getThisWorld().getSeed());
-                }
-                wormholeWorld.getThisWorld().save();
-            }
-            else {
-                wormholeWorld.setThisWorld(thisPlugin.getServer().getWorld(worldName));
-                wormholeWorld.setWorldSeed(wormholeWorld.getThisWorld().getSeed());
+                
+                wormholeWorld.getWorld().save();
+            } else {
+                wormholeWorld.setWorld(thisPlugin.getServer().getWorld(worldName));
+                wormholeWorld.setWorldSeed(wormholeWorld.getWorld().getSeed());
             }
 
-            wormholeWorld.setWorldSpawn(wormholeWorld.isWorldTypeNether()
-                ? findSafeSpawn(wormholeWorld.getThisWorld().getSpawnLocation(), 13, 13)
-                : wormholeWorld.getThisWorld().getSpawnLocation());
+            wormholeWorld.setWorldSpawn(wormholeWorld.isWorldTypeNether() || wormholeWorld.isWorldTypeSkylands()
+                    ? findSafeSpawn(wormholeWorld.getWorld().getSpawnLocation(), 13, 13)
+                    : wormholeWorld.getWorld().getSpawnLocation());
 
             final int tsX = wormholeWorld.getWorldSpawn().getBlockX();
             final int tsY = wormholeWorld.getWorldSpawn().getBlockY();
             final int tsZ = wormholeWorld.getWorldSpawn().getBlockZ();
 
-            if ( !wormholeWorld.getWorldSpawn().equals(wormholeWorld.getThisWorld().getSpawnLocation())) {
-                wormholeWorld.getThisWorld().setSpawnLocation(tsX, tsY, tsZ);
+            if (!wormholeWorld.getWorldSpawn().equals(wormholeWorld.getWorld().getSpawnLocation())) {
+                wormholeWorld.getWorld().setSpawnLocation(tsX, tsY, tsZ);
             }
             final int[] tempSpawn = {
                 tsX, tsY, tsZ
@@ -267,8 +279,11 @@ public class WorldManager {
             clearWorldCreatures(wormholeWorld);
             setWorldWeather(wormholeWorld);
             setWorldPvP(wormholeWorld);
+            
+            wormholeWorld.setWorldLoaded(true);
             return addWorld(wormholeWorld);
         }
+        
         return false;
     }
 
@@ -291,50 +306,42 @@ public class WorldManager {
             if (safeSpawn != null) {
                 thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass 0/0.");
                 return safeSpawn;
-            }
-            else {
+            } else {
                 safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX + xzDepthOdd, worldSpawnZ, yDepthOdd, xzDepthOdd);
                 if (safeSpawn != null) {
                     thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass +" + xzDepthOdd + "/0.");
                     return safeSpawn;
-                }
-                else {
+                } else {
                     safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX + xzDepthOdd, worldSpawnZ + xzDepthOdd, yDepthOdd, xzDepthOdd);
                     if (safeSpawn != null) {
                         thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass +" + xzDepthOdd + "/+" + xzDepthOdd + ".");
                         return safeSpawn;
-                    }
-                    else {
+                    } else {
                         safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX, worldSpawnZ + xzDepthOdd, yDepthOdd, xzDepthOdd);
                         if (safeSpawn != null) {
                             thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass 0/+" + xzDepthOdd + ".");
                             return safeSpawn;
-                        }
-                        else {
+                        } else {
                             safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX - xzDepthOdd, worldSpawnZ + xzDepthOdd, yDepthOdd, xzDepthOdd);
                             if (safeSpawn != null) {
                                 thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass -" + xzDepthOdd + "/+" + xzDepthOdd + ".");
                                 return safeSpawn;
-                            }
-                            else {
+                            } else {
                                 safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX - xzDepthOdd, worldSpawnZ, yDepthOdd, xzDepthOdd);
                                 if (safeSpawn != null) {
                                     thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass -" + xzDepthOdd + "/0.");
                                     return safeSpawn;
-                                }
-                                else {
+                                } else {
                                     safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX - xzDepthOdd, worldSpawnZ - xzDepthOdd, yDepthOdd, xzDepthOdd);
                                     if (safeSpawn != null) {
                                         thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass -" + xzDepthOdd + "/-" + xzDepthOdd + ".");
                                         return safeSpawn;
-                                    }
-                                    else {
+                                    } else {
                                         safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX, worldSpawnZ - xzDepthOdd, yDepthOdd, xzDepthOdd);
                                         if (safeSpawn != null) {
                                             thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass 0/-" + xzDepthOdd + ".");
                                             return safeSpawn;
-                                        }
-                                        else {
+                                        } else {
                                             safeSpawn = findSafeSpawnFromYXZ(world, worldSpawnY, worldSpawnX + xzDepthOdd, worldSpawnZ - xzDepthOdd, yDepthOdd, xzDepthOdd);
                                             if (safeSpawn != null) {
                                                 thisPlugin.prettyLog(Level.FINE, false, "Found safe spawn in pass +" + xzDepthOdd + "/-" + xzDepthOdd + ".");
@@ -386,14 +393,12 @@ public class WorldManager {
                 blockYaxisPlane.put(iYY, populateYaxisPlane(world, worldSpawnX, worldSpawnZ, iY, iYY, xzAxisDepth, xzAxisSmall, xzAxisLarge));
                 iYY++;
             }
-        }
-        else if (worldSpawnY <= yAxisSmall) {
+        } else if (worldSpawnY <= yAxisSmall) {
             for (int iY = worldSpawnY; iY < worldSpawnY + yAxisDepth; iY++) {
                 blockYaxisPlane.put(iYY, populateYaxisPlane(world, worldSpawnX, worldSpawnZ, iY, iYY, xzAxisDepth, xzAxisSmall, xzAxisLarge));
                 iYY++;
             }
-        }
-        else if (worldSpawnY >= 127 - yAxisLarge) {
+        } else if (worldSpawnY >= 127 - yAxisLarge) {
             for (int iY = worldSpawnY - yAxisDepth; iY < worldSpawnY; iY++) {
                 blockYaxisPlane.put(iYY, populateYaxisPlane(world, worldSpawnX, worldSpawnZ, iY, iYY, xzAxisDepth, xzAxisSmall, xzAxisLarge));
                 iYY++;
@@ -446,13 +451,20 @@ public class WorldManager {
      * @return the safe teleport location
      */
     public static Location getSafeSpawnLocation(final WormholeWorld wormholeWorld, final Player player) {
-        return wormholeWorld.isWorldTypeNether()
-            ? WorldManager.checkSafeTeleportDestination(wormholeWorld.getWorldSpawn())
-                ? new Location(wormholeWorld.getThisWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getWorldSpawn().getBlockY(), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch())
-                : WorldManager.findSafeSpawn(wormholeWorld.getWorldSpawn(), 3, 3)
-            : WorldManager.checkSafeTeleportDestination(wormholeWorld.getWorldSpawn())
-                ? new Location(wormholeWorld.getThisWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getWorldSpawn().getBlockY(), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch())
-                : new Location(wormholeWorld.getThisWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getThisWorld().getHighestBlockYAt(wormholeWorld.getWorldSpawn()), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch());
+        return (
+                wormholeWorld.isWorldTypeNether() || wormholeWorld.isWorldTypeSkylands()
+                ? (
+                    WorldManager.checkSafeTeleportDestination(wormholeWorld.getWorldSpawn())
+                    ? new Location(wormholeWorld.getWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getWorldSpawn().getBlockY(), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch())
+                    : WorldManager.findSafeSpawn(wormholeWorld.getWorldSpawn(), 3, 3)
+                )
+                : (
+                    WorldManager.checkSafeTeleportDestination(wormholeWorld.getWorldSpawn())
+                    ? new Location(wormholeWorld.getWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getWorldSpawn().getBlockY(), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch())
+                    : new Location(wormholeWorld.getWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getWorld().getHighestBlockYAt(wormholeWorld.getWorldSpawn()), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch())
+                  )
+                );
+        
     }
 
     /**
@@ -465,8 +477,7 @@ public class WorldManager {
     public static WormholeWorld getWorldFromPlayer(final Player player) {
         if (player != null) {
             return getWormholeWorld(player.getWorld().getName());
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -536,8 +547,7 @@ public class WorldManager {
                     }
                 }
             }
-        }
-        else {
+        } else {
             createDefaultWorld();
             loaded++;
         }
@@ -553,22 +563,27 @@ public class WorldManager {
      */
     public static boolean loadWorld(final WormholeWorld wormholeWorld) {
         if (wormholeWorld != null) {
-            wormholeWorld.setWorldLoaded(true);
-            wormholeWorld.setThisWorld(wormholeWorld.getWorldSeed() == 0
-                ? thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.isWorldTypeNether()
-                    ? Environment.NETHER : Environment.NORMAL)
-                : thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.isWorldTypeNether()
-                    ? Environment.NETHER : Environment.NORMAL, wormholeWorld.getWorldSeed()));
-            wormholeWorld.getThisWorld().setSpawnLocation(wormholeWorld.getWorldCustomSpawn()[0], wormholeWorld.getWorldCustomSpawn()[1], wormholeWorld.getWorldCustomSpawn()[2]);
-            wormholeWorld.setWorldSpawn(wormholeWorld.getThisWorld().getSpawnLocation());
+            wormholeWorld.setWorld(
+                wormholeWorld.getWorldSeed() == 0
+                ? thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.getWorldEnvironment())
+                : thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.getWorldEnvironment(), wormholeWorld.getWorldSeed())
+            );
+            
+            wormholeWorld.getWorld().setSpawnLocation(wormholeWorld.getWorldCustomSpawn()[0], wormholeWorld.getWorldCustomSpawn()[1], wormholeWorld.getWorldCustomSpawn()[2]);
+            wormholeWorld.setWorldSpawn(wormholeWorld.getWorld().getSpawnLocation());
             if (wormholeWorld.getWorldSeed() == 0) {
-                wormholeWorld.setWorldSeed(wormholeWorld.getThisWorld().getSeed());
+                wormholeWorld.setWorldSeed(wormholeWorld.getWorld().getSeed());
             }
+            
+            wormholeWorld.setWorldLoaded(true);
+            
             if (addWorld(wormholeWorld)) {
                 final int c = clearWorldCreatures(wormholeWorld);
+                
                 if (c > 0) {
                     thisPlugin.prettyLog(Level.INFO, false, "Cleared \"" + c + "\" creature entities on world \"" + wormholeWorld.getWorldName() + "\"");
                 }
+                
                 setWorldWeather(wormholeWorld);
                 setWorldPvP(wormholeWorld);
                 return true;
@@ -645,7 +660,7 @@ public class WorldManager {
      */
     public static void setWorldPvP(final WormholeWorld wormholeWorld) {
         if (wormholeWorld.isWorldLoaded()) {
-            wormholeWorld.getThisWorld().setPVP(wormholeWorld.isWorldAllowPvP());
+            wormholeWorld.getWorld().setPVP(wormholeWorld.isWorldAllowPvP());
         }
     }
 
@@ -657,21 +672,21 @@ public class WorldManager {
      */
     public static void setWorldWeather(final WormholeWorld wormholeWorld) {
         if (wormholeWorld.isWorldWeatherLock()) {
-            final World world = wormholeWorld.getThisWorld();
+            final World world = wormholeWorld.getWorld();
             switch (wormholeWorld.getWorldWeatherLockType()) {
-                case CLEAR :
+                case CLEAR:
                     world.setStorm(false);
                     world.setThundering(false);
                     break;
-                case RAIN :
+                case RAIN:
                     world.setStorm(true);
                     world.setThundering(false);
                     break;
-                case STORM :
+                case STORM:
                     world.setStorm(true);
                     world.setThundering(true);
                     break;
-                default :
+                default:
                     break;
             }
         }

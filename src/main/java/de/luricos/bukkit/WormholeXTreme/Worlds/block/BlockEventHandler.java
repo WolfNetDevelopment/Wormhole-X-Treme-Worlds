@@ -42,7 +42,7 @@ public class BlockEventHandler extends BlockListener {
      */
     @Override
     public void onBlockBurn(final BlockBurnEvent event) {
-        if ( !event.isCancelled() && (event.getBlock() != null) && BlockBurn.handleBlockBurn(event.getBlock())) {
+        if (!event.isCancelled() && (event.getBlock() != null) && BlockBurn.handleBlockBurn(event.getBlock())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Cancelled BlockBurnEvent on " + event.getBlock().getWorld().getName());
         }
@@ -53,7 +53,7 @@ public class BlockEventHandler extends BlockListener {
      */
     @Override
     public void onBlockFromTo(final BlockFromToEvent event) {
-        if ( !event.isCancelled() && (event.getBlock() != null) && BlockFromTo.handleBlockFromTo(event.getBlock())) {
+        if (!event.isCancelled() && (event.getBlock() != null) && BlockFromTo.handleBlockFromTo(event.getBlock())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Cancelled BlockFromTo Event on " + event.getBlock().getWorld().getName());
         }
@@ -64,7 +64,7 @@ public class BlockEventHandler extends BlockListener {
      */
     @Override
     public void onBlockIgnite(final BlockIgniteEvent event) {
-        if ( !event.isCancelled() && (event.getBlock() != null) && BlockIgnite.handleBlockIgnite(event.getBlock(), event.getCause())) {
+        if (!event.isCancelled() && (event.getBlock() != null) && BlockIgnite.handleBlockIgnite(event.getBlock(), event.getCause())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINE, false, "Cancelled BlockIgniteEvent on " + event.getBlock().getWorld().getName());
         }

@@ -28,7 +28,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class BlockBurn {
+public class BlockBurn {
 
     /**
      * Handle block burn.
@@ -41,7 +41,7 @@ class BlockBurn {
         final String worldName = block.getWorld().getName();
         if (WorldManager.isWormholeWorld(worldName)) {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
-            if ( !wormholeWorld.isWorldAllowFireSpread() || !wormholeWorld.isWorldAllowFire()) {
+            if (!wormholeWorld.isWorldAllowFireSpread() || !wormholeWorld.isWorldAllowFire()) {
                 return true;
             }
         }

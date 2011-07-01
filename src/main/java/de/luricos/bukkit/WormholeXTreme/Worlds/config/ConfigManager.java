@@ -34,18 +34,13 @@ public class ConfigManager {
 
         /** The server option help. */
         serverOptionHelp,
-
         /** The server option ops bypass permissions. */
         serverOptionOpsBypassPermissions,
-
         /** The server option permissions. */
         serverOptionPermissions,
-
         /** The server option timelock. */
         serverOptionTimelock
-
     }
-
     /** The Constant options. */
     protected static final ConcurrentHashMap<ServerOptionKeys, ServerOption> serverOptions = new ConcurrentHashMap<ServerOptionKeys, ServerOption>();
 
@@ -69,8 +64,7 @@ public class ConfigManager {
         final ServerOption o = getServerOption(ServerOptionKeys.serverOptionHelp);
         if (o != null) {
             return Boolean.valueOf(o.getOptionValue().toString());
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -84,8 +78,7 @@ public class ConfigManager {
         final ServerOption o = getServerOption(ServerOptionKeys.serverOptionOpsBypassPermissions);
         if (o != null) {
             return Boolean.valueOf(o.getOptionValue().toString());
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -99,8 +92,7 @@ public class ConfigManager {
         final ServerOption o = getServerOption(ServerOptionKeys.serverOptionPermissions);
         if (o != null) {
             return Boolean.valueOf(o.getOptionValue().toString());
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -114,8 +106,7 @@ public class ConfigManager {
         final ServerOption o = getServerOption(ServerOptionKeys.serverOptionTimelock);
         if (o != null) {
             return Boolean.valueOf(o.getOptionValue().toString());
-        }
-        else {
+        } else {
             return false;
         }
     }

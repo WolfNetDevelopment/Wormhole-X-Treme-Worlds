@@ -29,7 +29,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class BlockFromTo {
+public class BlockFromTo {
 
     /**
      * Handle block from to.
@@ -45,13 +45,13 @@ class BlockFromTo {
             final Material blockType = block.getType();
             if (blockType != null) {
                 switch (blockType) {
-                    case WATER :
-                    case STATIONARY_WATER :
+                    case WATER:
+                    case STATIONARY_WATER:
                         return wormholeWorld.isWorldAllowWaterSpread() ? false : true;
-                    case LAVA :
-                    case STATIONARY_LAVA :
+                    case LAVA:
+                    case STATIONARY_LAVA:
                         return wormholeWorld.isWorldAllowLavaSpread() ? false : true;
-                    default :
+                    default:
                         break;
                 }
             }

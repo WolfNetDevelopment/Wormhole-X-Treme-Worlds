@@ -26,7 +26,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class ThunderChange {
+public class ThunderChange {
 
     /**
      * Handle thunder change.
@@ -35,18 +35,18 @@ class ThunderChange {
      *            the world name
      * @return true, if successful
      */
-    static boolean handleThunderChange(final String worldName, final boolean thunder) {
+    public static boolean handleThunderChange(final String worldName, final boolean thunder) {
         if (WorldManager.isWormholeWorld(worldName)) {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
             if (wormholeWorld.isWorldWeatherLock()) {
                 switch (wormholeWorld.getWorldWeatherLockType()) {
-                    case CLEAR :
-                    case RAIN :
+                    case CLEAR:
+                    case RAIN:
                         return thunder ? true : false;
-                    case STORM :
+                    case STORM:
                         return thunder ? false : true;
-                    case NONE :
-                    default :
+                    case NONE:
+                    default:
                         return false;
                 }
             }

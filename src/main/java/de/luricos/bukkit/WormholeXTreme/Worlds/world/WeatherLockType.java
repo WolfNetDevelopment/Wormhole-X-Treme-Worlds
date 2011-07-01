@@ -28,24 +28,19 @@ import java.util.Map;
  * @author alron
  */
 public enum WeatherLockType {
+
     /** No specific weather. */
     NONE(0),
-
     /** Clear Skys. */
     CLEAR(1),
-
     /** Rainy weather. */
     RAIN(2),
-
     /** Thunderstorms. */
     STORM(3);
-
     /** The id. */
     private final int id;
-
     /** The Constant lookupId. */
     private static final Map<Integer, WeatherLockType> lookupId = new HashMap<Integer, WeatherLockType>();
-
     /** The Constant lookupName. */
     private static final Map<String, WeatherLockType> lookupName = new HashMap<String, WeatherLockType>();
 

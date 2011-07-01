@@ -54,24 +54,21 @@ public class CommandUtilities {
         final ArrayList<String> argsPartsList = new ArrayList<String>();
         for (final String argPart : escapedArgs) {
             // No commands or args found yet, must primary, append
-            if ( !commandFound && !commandHasArgs && !argPart.startsWith("-")) {
+            if (!commandFound && !commandHasArgs && !argPart.startsWith("-")) {
                 argsPartsList.add(argPart);
-            }
-            // Found command, if command found previously make note of it.
+            } // Found command, if command found previously make note of it.
             else if (argPart.startsWith("-")) {
                 if (commandFound) {
                     try {
                         Long.valueOf(argPart);
                         commandHasArgs = true;
                         tempString.append("|");
-                    }
-                    catch (final NumberFormatException e) {
+                    } catch (final NumberFormatException e) {
                         commandFoundNoArgs = true;
                     }
                 }
                 commandFound = true;
-            }
-            // Previously a command was found, so we must be an argument to that command.
+            } // Previously a command was found, so we must be an argument to that command.
             else if (commandFound) {
                 commandHasArgs = true;
                 tempString.append("|");
@@ -124,16 +121,15 @@ public class CommandUtilities {
             // First check to see if we have a starting or stopping quote
             if (part.contains("\"") && !startQuoteFound) {
                 // Two quotes in same string = no spaces in quoted text;
-                if ( !part.replaceFirst("\"", "").contains("\"")) {
+                if (!part.replaceFirst("\"", "").contains("\"")) {
                     startQuoteFound = true;
                 }
-            }
-            else if (part.contains("\"") && startQuoteFound) {
+            } else if (part.contains("\"") && startQuoteFound) {
                 endQuoteFound = true;
             }
 
             // If no quotes yet, we just append to list
-            if ( !startQuoteFound) {
+            if (!startQuoteFound) {
                 argsPartsList.add(part);
             }
 
@@ -146,8 +142,7 @@ public class CommandUtilities {
                     startQuoteFound = false;
                     endQuoteFound = false;
                     tempString = new StringBuilder();
-                }
-                else {
+                } else {
                     tempString.append(" ");
                 }
             }
@@ -185,8 +180,7 @@ public class CommandUtilities {
     static boolean playerCheck(final CommandSender sender) {
         if (sender instanceof Player) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

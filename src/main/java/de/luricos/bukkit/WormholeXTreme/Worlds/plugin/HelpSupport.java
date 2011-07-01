@@ -38,7 +38,6 @@ public class HelpSupport {
 
     /** The Constant thisPlugin. */
     private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /** The Constant pluginManager. */
     private static final PluginManager pluginManager = WormholeXTremeWorlds.getThisPlugin().getServer().getPluginManager();
 
@@ -63,23 +62,20 @@ public class HelpSupport {
                 final Plugin helpTest = pluginManager.getPlugin("Help");
                 if (helpTest != null) {
                     final String version = helpTest.getDescription().getVersion();
-                    if ( !version.startsWith("0.2")) {
+                    if (!version.startsWith("0.2")) {
                         thisPlugin.prettyLog(Level.WARNING, false, "Not a support version of Help: " + version + " Recommended is: 0.2.x");
                     }
                     try {
                         PluginSupport.setHelp((Help) helpTest);
                         thisPlugin.prettyLog(Level.INFO, false, "Attached to Help version: " + version);
-                    }
-                    catch (final ClassCastException e) {
+                    } catch (final ClassCastException e) {
                         thisPlugin.prettyLog(Level.WARNING, false, "Failed to get cast to Help: " + e.getMessage());
                     }
-                }
-                else {
+                } else {
                     thisPlugin.prettyLog(Level.INFO, false, "Help plugin is not yet available; there will be no Help integration until it is loaded.");
                 }
             }
-        }
-        else {
+        } else {
             thisPlugin.prettyLog(Level.INFO, false, "Help Plugin support disabled via config.xml");
         }
     }
@@ -90,8 +86,8 @@ public class HelpSupport {
     public static void registerHelpCommands() {
         if ((PluginSupport.getHelp() != null) && ConfigManager.getServerOptionHelp()) {
             PluginSupport.getHelp().registerCommand("wxw", "Wormhole X-Treme Worlds administration, configuration and utilities command", thisPlugin, true);
+            
             if ((PluginSupport.getPermissionHandler() != null) && ConfigManager.getServerOptionPermissions()) {
-
                 PluginSupport.getHelp().registerCommand("wxw go [world]", "Go to spawn of specified world.", thisPlugin, PermissionType.GO.getPermission());
                 PluginSupport.getHelp().registerCommand("wxw list", "List all loaded and configured worlds.", thisPlugin, PermissionType.LIST.getPermission());
                 PluginSupport.getHelp().registerCommand("wxw remove [world]", "Remove world from configuration.", thisPlugin, PermissionType.REMOVE.getPermission());
@@ -101,8 +97,7 @@ public class HelpSupport {
                 PluginSupport.getHelp().registerCommand("wxw setspawn", "Set spawn of current world to current location.", thisPlugin, PermissionType.SET_SPAWN.getPermission());
                 PluginSupport.getHelp().registerCommand("wxw create [args]", "Create new world with specified args.", thisPlugin, PermissionType.CREATE.getPermission());
                 PluginSupport.getHelp().registerCommand("wxw spawn", "Go to spawn of current world.", thisPlugin, PermissionType.SPAWN.getPermission());
-            }
-            else {
+            } else {
                 PluginSupport.getHelp().registerCommand("wxw go [world]", "Go to spawn of specified world.", thisPlugin, "OP");
                 PluginSupport.getHelp().registerCommand("wxw list", "List all loaded and configured worlds.", thisPlugin, "OP");
                 PluginSupport.getHelp().registerCommand("wxw remove [world]", "Remove world from configuration.", thisPlugin, "OP");

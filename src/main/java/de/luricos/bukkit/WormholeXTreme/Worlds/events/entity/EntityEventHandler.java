@@ -36,6 +36,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
  * @author alron
  */
 public class EntityEventHandler extends EntityListener {
+
     /** The this plugin. */
     private final static WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
 
@@ -44,7 +45,7 @@ public class EntityEventHandler extends EntityListener {
      */
     @Override
     public void onCreatureSpawn(final CreatureSpawnEvent event) {
-        if ( !event.isCancelled() && (event.getEntity() != null) && CreatureSpawn.handleCreatureSpawn(event.getEntity())) {
+        if (!event.isCancelled() && (event.getEntity() != null) && CreatureSpawn.handleCreatureSpawn(event.getEntity())) {
             event.setCancelled(true);
             thisPlugin.prettyLog(Level.FINEST, false, "Denied creature spawn on world: " + event.getLocation().getWorld().getName() + " creature type: " + event.getCreatureType().toString());
         }
@@ -55,9 +56,9 @@ public class EntityEventHandler extends EntityListener {
      */
     @Override
     public void onEntityDamage(final EntityDamageEvent event) {
-        if ( !event.isCancelled() && (event.getEntity() instanceof Player)) {
+        if (!event.isCancelled() && (event.getEntity() instanceof Player)) {
             final Entity damager = event instanceof EntityDamageByEntityEvent
-                ? ((EntityDamageByEntityEvent) event).getDamager() : event instanceof EntityDamageByProjectileEvent
+                    ? ((EntityDamageByEntityEvent) event).getDamager() : event instanceof EntityDamageByProjectileEvent
                     ? ((EntityDamageByProjectileEvent) event).getDamager() : null;
             if (EntityDamage.handleEntityDamage((Player) event.getEntity(), event.getCause(), damager)) {
                 event.setCancelled(true);

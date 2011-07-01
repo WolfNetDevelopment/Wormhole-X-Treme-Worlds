@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 
 /**
  * The WormholeWorld instance. Everything that we know about a world can be found here.
@@ -55,7 +56,7 @@ public class WormholeWorld {
     /** The allow player void damage. */
     private boolean playerAllowVoidDamage = true;
     /** The this world. */
-    private World thisWorld = null;
+    private World world = null;
     /** The world allow fire. */
     private boolean worldAllowFire = true;
     /** The allow fire spread. */
@@ -96,8 +97,12 @@ public class WormholeWorld {
     private boolean worldTimeLock = false;
     /** The time lock type. */
     private TimeLockType worldTimeLockType = TimeLockType.NONE;
+    /** The normal world. */
+    private boolean worldTypeNormal = false;    
     /** The nether world. */
     private boolean worldTypeNether = false;
+    /** The skyland world */
+    private boolean worldTypeSkylands = false;
     /** The weather lock. */
     private boolean worldWeatherLock = false;
     /** The weather lock type. */
@@ -107,7 +112,6 @@ public class WormholeWorld {
      * Instantiates a new world.
      */
     public WormholeWorld() {
-
     }
 
     /**
@@ -123,9 +127,8 @@ public class WormholeWorld {
         if ((stickyChunk != null) && (ownerPlugin != null)) {
             if (getWorldStickyChunks().containsKey(stickyChunk)) {
                 getWorldStickyChunks().get(stickyChunk).put(ownerPlugin, getWorldStickyChunks().get(stickyChunk).containsKey(ownerPlugin)
-                    ? getWorldStickyChunks().get(stickyChunk).get(ownerPlugin) + 1 : 1);
-            }
-            else {
+                        ? getWorldStickyChunks().get(stickyChunk).get(ownerPlugin) + 1 : 1);
+            } else {
                 final ConcurrentHashMap<String, Integer> ownerPlugins = new ConcurrentHashMap<String, Integer>();
                 ownerPlugins.put(ownerPlugin, 1);
                 getWorldStickyChunks().put(stickyChunk, ownerPlugins);
@@ -147,10 +150,10 @@ public class WormholeWorld {
     /**
      * Gets the this world.
      * 
-     * @return the thisWorld
+     * @return the world
      */
-    public World getThisWorld() {
-        return thisWorld;
+    public World getWorld() {
+        return world;
     }
 
     /**
@@ -188,6 +191,23 @@ public class WormholeWorld {
     public Location getWorldSpawn() {
         return worldSpawn;
     }
+    
+    public Environment getWorldEnvironment() {
+        if (this.isWorldTypeNormal())
+            return Environment.NORMAL;
+        
+        if (this.isWorldTypeNether())
+            return Environment.NETHER;
+        
+        if (this.isWorldTypeSkylands())
+            return Environment.SKYLANDS;
+        
+        return null;
+    }
+    
+    public String getWorldType() {
+        return this.getWorldEnvironment().toString();
+    }
 
     /**
      * Gets the world spawn to int[].
@@ -196,8 +216,8 @@ public class WormholeWorld {
      */
     public int[] getWorldSpawnToInt() {
         return new int[]{
-            (int) worldSpawn.getX(), (int) worldSpawn.getY(), (int) worldSpawn.getZ()
-        };
+                    (int) worldSpawn.getX(), (int) worldSpawn.getY(), (int) worldSpawn.getZ()
+                };
     }
 
     public ConcurrentHashMap<Chunk, ConcurrentHashMap<String, Integer>> getWorldStickyChunks() {
@@ -450,13 +470,31 @@ public class WormholeWorld {
     }
 
     /**
-     * Checks if is nether world.
+     * Checks if this world is a NORMAL env.
      * 
-     * @return true, if is nether world
+     * @return true, if this is a normal world
+     */
+    public boolean isWorldTypeNormal() {
+        return worldTypeNormal;
+    }    
+    
+    /**
+     * Checks if this world is a NETHER env.
+     * 
+     * @return true, if this is a nether world
      */
     public boolean isWorldTypeNether() {
         return worldTypeNether;
     }
+    
+    /**
+     * Checks if this world is a SKYLANDS env.
+     * 
+     * @return true, if this is a skylands world
+     */
+    public boolean isWorldTypeSkylands() {
+        return worldTypeSkylands;
+    }    
 
     /**
      * Checks if is weather lock.
@@ -482,11 +520,9 @@ public class WormholeWorld {
                 if (getWorldStickyChunks().get(stickyChunk).containsKey(ownerPlugin)) {
                     if (getWorldStickyChunks().get(stickyChunk).get(ownerPlugin) > 1) {
                         getWorldStickyChunks().get(stickyChunk).put(ownerPlugin, getWorldStickyChunks().get(stickyChunk).get(ownerPlugin) - 1);
-                    }
-                    else if (getWorldStickyChunks().get(stickyChunk).size() > 1) {
+                    } else if (getWorldStickyChunks().get(stickyChunk).size() > 1) {
                         getWorldStickyChunks().get(stickyChunk).remove(ownerPlugin);
-                    }
-                    else {
+                    } else {
                         getWorldStickyChunks().remove(stickyChunk);
                     }
                     return true;
@@ -599,11 +635,10 @@ public class WormholeWorld {
     /**
      * Sets the this world.
      * 
-     * @param thisWorld
-     *            the thisWorld to set
+     * @param world the world to set
      */
-    public void setThisWorld(final World thisWorld) {
-        this.thisWorld = thisWorld;
+    public void setWorld(final World world) {
+        this.world = world;
     }
 
     /**
@@ -784,28 +819,45 @@ public class WormholeWorld {
      */
     public void setWorldTimeLockType(final TimeLockType worldTimeLockType) {
         switch (worldTimeLockType) {
-            case DAY :
-            case NIGHT :
+            case DAY:
+            case NIGHT:
                 worldTimeLock = true;
                 this.worldTimeLockType = worldTimeLockType;
                 break;
-            case NONE :
+            case NONE:
                 worldTimeLock = false;
                 this.worldTimeLockType = worldTimeLockType;
                 break;
-            default :
+            default:
                 break;
         }
     }
 
     /**
+     * Sets the normal world.
+     * 
+     * @param worldTypeNormal true or false
+     */
+    public void setWorldTypeNormal(final boolean worldTypeNormal) {
+        this.worldTypeNormal = worldTypeNormal;
+    }    
+    
+    /**
      * Sets the nether world.
      * 
-     * @param netherWorld
-     *            the new nether world
+     * @param worldTypeNether true or false
      */
     public void setWorldTypeNether(final boolean worldTypeNether) {
         this.worldTypeNether = worldTypeNether;
+    }
+    
+    /**
+     * Sets the skyland world.
+     * 
+     * @param worldTypeSkylands true or false
+     */
+    public void setWorldTypeSkylands(boolean worldTypeSkylands) {
+        this.worldTypeSkylands = worldTypeSkylands;
     }
 
     /**
@@ -826,23 +878,23 @@ public class WormholeWorld {
      */
     public void setWorldWeatherLockType(final WeatherLockType worldWeatherLockType) {
         switch (worldWeatherLockType) {
-            case CLEAR :
-            case RAIN :
+            case CLEAR:
+            case RAIN:
                 worldWeatherLock = true;
                 worldAllowWeatherThunder = false;
                 this.worldWeatherLockType = worldWeatherLockType;
                 break;
-            case STORM :
+            case STORM:
                 worldWeatherLock = true;
                 worldAllowWeatherThunder = true;
                 this.worldWeatherLockType = worldWeatherLockType;
                 break;
-            case NONE :
+            case NONE:
                 worldWeatherLock = false;
                 worldAllowWeatherThunder = true;
                 this.worldWeatherLockType = worldWeatherLockType;
                 break;
-            default :
+            default:
                 break;
         }
     }

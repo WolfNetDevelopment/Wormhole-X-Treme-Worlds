@@ -25,7 +25,6 @@ import org.bukkit.plugin.PluginManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.block.BlockEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.entity.EntityEventHandler;
-import de.luricos.bukkit.WormholeXTreme.Worlds.events.server.ServerEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.weather.WeatherEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.world.WorldEventHandler;
 
@@ -38,22 +37,14 @@ public class EventUtilities {
 
     /** The Constant thisPlugin. */
     private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /** The Constant pluginManager. */
     private static final PluginManager pluginManager = thisPlugin.getServer().getPluginManager();
-
     /** The Constant blockEventHandler. */
     private static final BlockEventHandler blockEventHandler = new BlockEventHandler();
-
     /** The Constant entityEventHandler. */
     private static final EntityEventHandler entityEventHandler = new EntityEventHandler();
-
-    /** The Constant serverEventHandler. */
-    private static final ServerEventHandler serverEventHandler = new ServerEventHandler();
-
     /** The Constant worldEventHandler. */
     private static final WorldEventHandler worldEventHandler = new WorldEventHandler();
-
     /** The Constant weatherEventHandler. */
     private static final WeatherEventHandler weatherEventHandler = new WeatherEventHandler();
 
@@ -61,9 +52,6 @@ public class EventUtilities {
      * Register events.
      */
     public static void registerEvents() {
-        pluginManager.registerEvent(Event.Type.PLUGIN_ENABLE, serverEventHandler, Priority.Monitor, thisPlugin);
-        pluginManager.registerEvent(Event.Type.PLUGIN_DISABLE, serverEventHandler, Priority.Monitor, thisPlugin);
-
         pluginManager.registerEvent(Event.Type.WORLD_LOAD, worldEventHandler, Priority.Monitor, thisPlugin);
         pluginManager.registerEvent(Event.Type.WORLD_SAVE, worldEventHandler, Priority.Monitor, thisPlugin);
         pluginManager.registerEvent(Event.Type.SPAWN_CHANGE, worldEventHandler, Priority.Monitor, thisPlugin);

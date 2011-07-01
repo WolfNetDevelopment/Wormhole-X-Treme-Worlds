@@ -32,7 +32,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  * 
  * @author alron
  */
-class CreatureSpawn {
+public class CreatureSpawn {
 
     /**
      * Handle creature spawn.
@@ -41,10 +41,10 @@ class CreatureSpawn {
      *            the entity
      * @return true, if successful
      */
-    static boolean handleCreatureSpawn(final Entity entity) {
+    public static boolean handleCreatureSpawn(final Entity entity) {
         if ((entity != null) && WorldManager.isWormholeWorld(entity.getWorld())) {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(entity.getWorld());
-            if (( !wormholeWorld.isWorldAllowSpawnHostiles() && ((entity instanceof Monster) || (entity instanceof Flying))) || ( !wormholeWorld.isWorldAllowSpawnNeutrals() && ((entity instanceof Animals) || (entity instanceof WaterMob)))) {
+            if ((!wormholeWorld.isWorldAllowSpawnHostiles() && ((entity instanceof Monster) || (entity instanceof Flying))) || (!wormholeWorld.isWorldAllowSpawnNeutrals() && ((entity instanceof Animals) || (entity instanceof WaterMob)))) {
                 return true;
             }
         }

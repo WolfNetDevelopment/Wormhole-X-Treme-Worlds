@@ -35,39 +35,29 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
  * @author alron
  */
 public enum PermissionType {
+
     /** The go permission. */
     GO("wxw.admin.go"),
-
     /** The list permission. */
     LIST("wxw.admin.list"),
-
     /** The remove permission. */
     REMOVE("wxw.admin.remove"),
-
     /** The connect permission. */
     LOAD("wxw.admin.load"),
-
     /** The modify permission. */
     MODIFY("wxw.admin.modify"),
-
     /** The info permission. */
     INFO("wxw.admin.info"),
-
     /** The set spawn permission. */
     SET_SPAWN("wxw.admin.setspawn"),
-
     /** The create permission. */
     CREATE("wxw.admin.create"),
-
     /** The spawn permission. */
     SPAWN("wxw.spawn");
-
     /** The permission node. */
     private final String permissionNode;
-
     /** The Constant permissionMap. */
     private static final Map<String, PermissionType> permissionMap = new HashMap<String, PermissionType>();
-
     /** The Constant thisPlugin. */
     private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
 
@@ -113,8 +103,7 @@ public enum PermissionType {
             boolean allowed = false;
             if ((player.isOp() && !ConfigManager.getServerOptionPermissions()) || (player.isOp() && ConfigManager.getServerOptionOpsBypassPermissions())) {
                 allowed = true;
-            }
-            else if ((PluginSupport.getPermissionHandler() != null) && PluginSupport.getPermissionHandler().has(player, permissionNode)) {
+            } else if ((PluginSupport.getPermissionHandler() != null) && PluginSupport.getPermissionHandler().has(player, permissionNode)) {
                 allowed = true;
             }
             if (allowed) {

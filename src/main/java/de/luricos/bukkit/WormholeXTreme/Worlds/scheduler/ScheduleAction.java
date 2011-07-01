@@ -38,20 +38,15 @@ public class ScheduleAction implements Runnable {
 
         /** The Time lock noon. */
         TimeLock,
-
         /** The Clear entities. */
         ClearEntities,
-
         /** The Set weather. */
         SetWeather
     }
-
     /** The wormhole world. */
     private WormholeWorld wormholeWorld = null;
-
     /** The action type. */
     private ActionType actionType = null;
-
     /** The Constant thisPlugin. */
     private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
 
@@ -103,23 +98,23 @@ public class ScheduleAction implements Runnable {
     public void run() {
         if (getActionType() != null) {
             switch (getActionType()) {
-                case ClearEntities :
+                case ClearEntities:
                     if (getWormholeWorld() != null) {
                         thisPlugin.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\" WormholeWorld \"" + getWormholeWorld().getWorldName() + "\"");
                         WorldManager.clearWorldCreatures(getWormholeWorld());
                     }
                     break;
-                case SetWeather :
+                case SetWeather:
                     if (getWormholeWorld() != null) {
                         thisPlugin.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\" WormholeWorld \"" + getWormholeWorld().getWorldName() + "\"");
                         WorldManager.setWorldWeather(getWormholeWorld());
                     }
                     break;
-                case TimeLock :
+                case TimeLock:
                     thisPlugin.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\"");
                     WorldManager.checkTimelockWorlds();
                     break;
-                default :
+                default:
                     break;
             }
         }

@@ -11,9 +11,9 @@ commands:
     description: Manage Worlds via Wormhole X-Treme Worlds
     usage: |
             Travel Commands:
-            /<command> [ go <world> | spawn ]
+            /<command> [go <world> | spawn]
             Info Commands:
-            /<command> [ list | info <world>]
+            /<command> [list | info <world>]
             Admin Commands:
             /<command> [create | remove | modify | setspawn | load] <args>
             All commands requiring arguments can be called without args for command specific help.

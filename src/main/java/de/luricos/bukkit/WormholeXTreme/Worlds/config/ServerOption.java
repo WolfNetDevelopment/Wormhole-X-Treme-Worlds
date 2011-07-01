@@ -25,17 +25,14 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOption
  * 
  * @author alron
  */
-class ServerOption {
+public class ServerOption {
 
     /** The option key. */
     private ServerOptionKeys optionKey;
-
     /** The option description. */
     private String optionDescription;
-
     /** The option type. */
     private String optionType;
-
     /** The option value. */
     private Object optionValue;
 
@@ -51,8 +48,7 @@ class ServerOption {
      * @param optionValue
      *            the option value
      */
-    protected ServerOption(final ServerOptionKeys optionKey, final String optionDescription, final String optionType,
-        final Object optionValue) {
+    protected ServerOption(final ServerOptionKeys optionKey, final String optionDescription, final String optionType, final Object optionValue) {
         if ((optionKey != null) && (optionDescription != null) && (optionValue != null)) {
             setOptionKey(optionKey);
             setOptionDescription(optionDescription);
