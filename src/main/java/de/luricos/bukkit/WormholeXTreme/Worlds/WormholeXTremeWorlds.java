@@ -148,7 +148,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
      */
     @Override
     public void onLoad() {
-        setThisLogger(this.getServer().getLogger());
+        setThisLogger(Logger.getLogger(this.getServer().getLogger().getName() + ".WormholeXTremeWorlds"));
         setScheduler(this.getServer().getScheduler());
         prettyLog(Level.INFO, true, "Load Beginning.");
         XMLConfig.loadXmlConfig(this.getDescription());
