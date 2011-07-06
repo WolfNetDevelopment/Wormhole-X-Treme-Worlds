@@ -1,6 +1,6 @@
 /*
  * Wormhole X-Treme Worlds Plugin for Bukkit
- * Copyright (C) 2011 Dean Bailey
+ * Copyright (C) 2011 Dean Bailey <https://github.com/alron/Wormhole-X-Treme-Worlds>
  * 
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -201,6 +201,8 @@ public class WormholeWorld {
         
         if (this.isWorldTypeSkylands())
             return Environment.SKYLANDS;
+        
+        
         
         return null;
     }
