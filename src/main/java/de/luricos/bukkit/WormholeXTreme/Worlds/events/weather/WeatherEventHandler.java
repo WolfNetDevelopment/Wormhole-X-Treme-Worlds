@@ -20,14 +20,14 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.weather;
 
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.weather.WeatherListener;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import java.util.logging.Level;
 
 /**
  * The Class WeatherEventHandler.
@@ -36,18 +36,15 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
  */
 public class WeatherEventHandler extends WeatherListener {
 
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /* (non-Javadoc)
      * @see org.bukkit.event.weather.WeatherListener#onLightningStrike(org.bukkit.event.weather.LightningStrikeEvent)
      */
     @Override
     public void onLightningStrike(final LightningStrikeEvent event) {
-        thisPlugin.prettyLog(Level.FINE, false, "Lightning Strike caught on world: " + event.getWorld().getName());
+        WXLogger.prettyLog(Level.FINE, false, "Lightning Strike caught on world: " + event.getWorld().getName());
         if (!event.isCancelled() && LightningStrike.handleLightningStrike(event.getWorld().getName())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Lightning Strike cancelled on world: " + event.getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Lightning Strike cancelled on world: " + event.getWorld().getName());
         }
     }
 
@@ -56,10 +53,10 @@ public class WeatherEventHandler extends WeatherListener {
      */
     @Override
     public void onThunderChange(final ThunderChangeEvent event) {
-        thisPlugin.prettyLog(Level.FINE, false, "Thunder Change caught on world: " + event.getWorld().getName() + " state: " + event.toThunderState());
+        WXLogger.prettyLog(Level.FINE, false, "Thunder Change caught on world: " + event.getWorld().getName() + " state: " + event.toThunderState());
         if (!event.isCancelled() && ThunderChange.handleThunderChange(event.getWorld().getName(), event.toThunderState())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Thunder Change cancelled on world: " + event.getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Thunder Change cancelled on world: " + event.getWorld().getName());
         }
     }
 
@@ -68,10 +65,10 @@ public class WeatherEventHandler extends WeatherListener {
      */
     @Override
     public void onWeatherChange(final WeatherChangeEvent event) {
-        thisPlugin.prettyLog(Level.FINE, false, "Weather Change caught on world: " + event.getWorld().getName() + " state: " + event.toWeatherState());
+        WXLogger.prettyLog(Level.FINE, false, "Weather Change caught on world: " + event.getWorld().getName() + " state: " + event.toWeatherState());
         if (!event.isCancelled() && WeatherChange.handleWeatherChange(event.getWorld().getName(), event.toWeatherState())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Weather Change cancelled on world: " + event.getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Weather Change cancelled on world: " + event.getWorld().getName());
         }
     }
 }

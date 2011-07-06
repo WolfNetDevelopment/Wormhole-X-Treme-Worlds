@@ -20,7 +20,7 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.entity;
 
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import java.util.logging.Level;
 
 /**
  * The Class EntityEventHandler.
@@ -39,9 +39,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
  */
 public class EntityEventHandler extends EntityListener {
 
-    /** The this plugin. */
-    private final static WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /* (non-Javadoc)
      * @see org.bukkit.event.entity.EntityListener#onCreatureSpawn(org.bukkit.event.entity.CreatureSpawnEvent)
      */
@@ -49,7 +46,7 @@ public class EntityEventHandler extends EntityListener {
     public void onCreatureSpawn(final CreatureSpawnEvent event) {
         if (!event.isCancelled() && (event.getEntity() != null) && CreatureSpawn.handleCreatureSpawn(event.getEntity())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINEST, false, "Denied creature spawn on world: " + event.getLocation().getWorld().getName() + " creature type: " + event.getCreatureType().toString());
+            WXLogger.prettyLog(Level.FINEST, false, "Denied creature spawn on world: " + event.getLocation().getWorld().getName() + " creature type: " + event.getCreatureType().toString());
         }
     }
 
@@ -64,7 +61,7 @@ public class EntityEventHandler extends EntityListener {
                     ? ((EntityDamageByProjectileEvent) event).getDamager() : null;
             if (EntityDamage.handleEntityDamage((Player) event.getEntity(), event.getCause(), damager)) {
                 event.setCancelled(true);
-                thisPlugin.prettyLog(Level.FINEST, false, "Player damage event cancelled on " + ((Player) event.getEntity()).getName() + " on world " + event.getEntity().getWorld().getName());
+                WXLogger.prettyLog(Level.FINEST, false, "Player damage event cancelled on " + ((Player) event.getEntity()).getName() + " on world " + event.getEntity().getWorld().getName());
             }
         }
     }

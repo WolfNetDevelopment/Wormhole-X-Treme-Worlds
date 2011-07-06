@@ -20,17 +20,17 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.handler;
 
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
+import java.util.logging.Level;
 
 /**
  * The Class WorldHandler.
@@ -39,16 +39,11 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  */
 public class WorldHandler {
 
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /**
      * Adds the chunk sticky and loads the Wormhole World if it is unloaded.
      * 
-     * @param stickyChunk
-     *            the sticky chunk
-     * @param ownerPlugin
-     *            the owner plugin
+     * @param stickyChunk the sticky chunk
+     * @param ownerPlugin the owner plugin
      * @return true, if successful
      */
     public boolean addStickyChunk(final Chunk stickyChunk, final String ownerPlugin) {
@@ -57,18 +52,18 @@ public class WorldHandler {
             final int stickyChunkX = stickyChunk.getX();
             final int stickyChunkZ = stickyChunk.getZ();
             WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
-            thisPlugin.prettyLog(Level.FINE, false, "Sticky Chunk Addition: " + stickyChunk.toString() + " World: " + stickyChunk.getWorld().getName() + " Plugin: " + ownerPlugin);
+            WXLogger.prettyLog(Level.FINE, false, "Sticky Chunk Addition: " + stickyChunk.toString() + " World: " + stickyChunk.getWorld().getName() + " Plugin: " + ownerPlugin);
             if (wormholeWorld != null) {
                 if (wormholeWorld.isWorldLoaded() && wormholeWorld.addWorldStickyChunk(stickyChunk, ownerPlugin)) {
                     if (!wormholeWorld.getWorld().isChunkLoaded(stickyChunkX, stickyChunkZ)) {
                         wormholeWorld.getWorld().loadChunk(stickyChunkX, stickyChunkZ);
-                        thisPlugin.prettyLog(Level.FINE, false, "Loaded Sticky Chunk: " + stickyChunk.toString());
+                        WXLogger.prettyLog(Level.FINE, false, "Loaded Sticky Chunk: " + stickyChunk.toString());
                     }
                     return WorldManager.addWorld(wormholeWorld);
                 } else if (WorldManager.loadWorld(wormholeWorld) && ((wormholeWorld = WorldManager.getWormholeWorld(worldName)) != null) && wormholeWorld.addWorldStickyChunk(stickyChunk, ownerPlugin)) {
                     if (!wormholeWorld.getWorld().isChunkLoaded(stickyChunkX, stickyChunkZ)) {
                         wormholeWorld.getWorld().loadChunk(stickyChunkX, stickyChunkZ);
-                        thisPlugin.prettyLog(Level.FINE, false, "Loaded Sticky Chunk: " + stickyChunk.toString());
+                        WXLogger.prettyLog(Level.FINE, false, "Loaded Sticky Chunk: " + stickyChunk.toString());
                     }
                     return WorldManager.addWorld(wormholeWorld);
                 }
@@ -80,8 +75,7 @@ public class WorldHandler {
     /**
      * Gets the player respawn location.
      * 
-     * @param player
-     *            the player
+     * @param player the player
      * @return the player respawn location
      */
     public Location getPlayerRespawnLocation(final Player player) {
@@ -93,28 +87,29 @@ public class WorldHandler {
     /**
      * Load world.
      * 
-     * @param worldName
-     *            the world name
+     * @param worldName the world name
      * @return true, if successful
      */
     public boolean loadWorld(final String worldName) {
-        if (WorldManager.isWormholeWorld(worldName)) {
-            final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
-            if (!wormholeWorld.isWorldLoaded()) {
-                WorldManager.loadWorld(wormholeWorld);
-            }
+        if (!WorldManager.isWormholeWorld(worldName)) {
+            return false;
+        }
+
+        final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
+        if (wormholeWorld.isWorldLoaded()) {
             return true;
         }
-        return false;
+        
+        WorldManager.loadWorld(wormholeWorld);
+        
+        return true;
     }
 
     /**
      * Delete sticky chunk only if a world is loaded.
      * 
-     * @param stickyChunk
-     *            the sticky chunk
-     * @param ownerPlugin
-     *            the owner plugin
+     * @param stickyChunk the sticky chunk
+     * @param ownerPlugin the owner plugin
      * @return true, if successful
      */
     public boolean removeStickyChunk(final Chunk stickyChunk, final String ownerPlugin) {
@@ -123,11 +118,11 @@ public class WorldHandler {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
             final int stickyChunkX = stickyChunk.getX();
             final int stickyChunkZ = stickyChunk.getZ();
-            thisPlugin.prettyLog(Level.FINE, false, "Sticky Chunk Removal: " + stickyChunk.toString() + " World: " + stickyChunk.getWorld().getName() + " Plugin: " + ownerPlugin);
+            WXLogger.prettyLog(Level.FINE, false, "Sticky Chunk Removal: " + stickyChunk.toString() + " World: " + stickyChunk.getWorld().getName() + " Plugin: " + ownerPlugin);
             if ((wormholeWorld != null) && wormholeWorld.isWorldLoaded() && wormholeWorld.removeWorldStickyChunk(stickyChunk, ownerPlugin)) {
                 if (wormholeWorld.getWorld().isChunkLoaded(stickyChunkX, stickyChunkZ) && !wormholeWorld.isWorldStickyChunk(stickyChunk)) {
                     wormholeWorld.getWorld().unloadChunkRequest(stickyChunkX, stickyChunkZ);
-                    thisPlugin.prettyLog(Level.FINE, false, "Unload Queued Former Sticky Chunk: " + stickyChunk.toString());
+                    WXLogger.prettyLog(Level.FINE, false, "Unload Queued Former Sticky Chunk: " + stickyChunk.toString());
                 }
                 return WorldManager.addWorld(wormholeWorld);
             }
@@ -138,8 +133,7 @@ public class WorldHandler {
     /**
      * Spawn player.
      * 
-     * @param player
-     *            the player
+     * @param player the player
      * @return true, if successful
      */
     public boolean spawnPlayer(final Player player) {
@@ -162,12 +156,9 @@ public class WorldHandler {
     /**
      * Spawn player.
      * 
-     * @param player
-     *            the player
-     * @param worldName
-     *            the world name
-     * @param permissionCheck
-     *            the permission check
+     * @param player the player
+     * @param worldName the world name
+     * @param permissionCheck the permission check
      * @return true, if successful
      */
     public boolean spawnPlayer(final Player player, final String worldName, final boolean permissionCheck) { // NO_UCD

@@ -20,14 +20,16 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.plugin;
 
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
+
+import java.util.logging.Level;
 
 /**
  * The Class PermissionsSupport.
@@ -36,8 +38,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
  */
 public class PermissionsSupport {
 
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
     /** The Constant pluginManager. */
     private static final PluginManager pluginManager = WormholeXTremeWorlds.getThisPlugin().getServer().getPluginManager();
 
@@ -48,7 +48,7 @@ public class PermissionsSupport {
         if (ConfigManager.getServerOptionPermissions()) {
             if (PluginSupport.getPermissionHandler() != null) {
                 PluginSupport.setPermissionHandler(null);
-                thisPlugin.prettyLog(Level.INFO, false, "Detached from Permissions plugin.");
+                WXLogger.prettyLog(Level.INFO, false, "Detached from Permissions plugin.");
             }
         }
     }
@@ -63,20 +63,20 @@ public class PermissionsSupport {
                 if (test != null) {
                     final String version = test.getDescription().getVersion();
                     if (!version.startsWith("2.5") && !version.startsWith("2.6") && !version.startsWith("2.7") && !version.startsWith("3.0")) {
-                        thisPlugin.prettyLog(Level.WARNING, false, "Not a supported version of Permissions. Recommended is 3.0.x");
+                        WXLogger.prettyLog(Level.WARNING, false, "Not a supported version of Permissions. Recommended is 3.0.x");
                     }
                     try {
                         PluginSupport.setPermissionHandler(((Permissions) test).getHandler());
-                        thisPlugin.prettyLog(Level.INFO, false, "Attached to Permissions version " + version);
+                        WXLogger.prettyLog(Level.INFO, false, "Attached to Permissions version " + version);
                     } catch (final ClassCastException e) {
-                        thisPlugin.prettyLog(Level.WARNING, false, "Failed to get cast to Permissions: " + e.getMessage());
+                        WXLogger.prettyLog(Level.WARNING, false, "Failed to get cast to Permissions: " + e.getMessage());
                     }
                 } else {
-                    thisPlugin.prettyLog(Level.INFO, false, "Permission Plugin not yet available.");
+                    WXLogger.prettyLog(Level.INFO, false, "Permission Plugin not yet available.");
                 }
             }
         } else {
-            thisPlugin.prettyLog(Level.INFO, false, "Permission Plugin support disabled via config.xml");
+            WXLogger.prettyLog(Level.INFO, false, "Permission Plugin support disabled via config.xml");
         }
     }
 }

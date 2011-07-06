@@ -20,14 +20,14 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.block;
 
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockListener;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import java.util.logging.Level;
 
 /**
  * The Class BlockEventHandler.
@@ -36,9 +36,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
  */
 public class BlockEventHandler extends BlockListener {
 
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /* (non-Javadoc)
      * @see org.bukkit.event.block.BlockListener#onBlockBurn(org.bukkit.event.block.BlockBurnEvent)
      */
@@ -46,7 +43,7 @@ public class BlockEventHandler extends BlockListener {
     public void onBlockBurn(final BlockBurnEvent event) {
         if (!event.isCancelled() && (event.getBlock() != null) && BlockBurn.handleBlockBurn(event.getBlock())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Cancelled BlockBurnEvent on " + event.getBlock().getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Cancelled BlockBurnEvent on " + event.getBlock().getWorld().getName());
         }
     }
 
@@ -57,7 +54,7 @@ public class BlockEventHandler extends BlockListener {
     public void onBlockFromTo(final BlockFromToEvent event) {
         if (!event.isCancelled() && (event.getBlock() != null) && BlockFromTo.handleBlockFromTo(event.getBlock())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Cancelled BlockFromTo Event on " + event.getBlock().getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Cancelled BlockFromTo Event on " + event.getBlock().getWorld().getName());
         }
     }
 
@@ -68,7 +65,7 @@ public class BlockEventHandler extends BlockListener {
     public void onBlockIgnite(final BlockIgniteEvent event) {
         if (!event.isCancelled() && (event.getBlock() != null) && BlockIgnite.handleBlockIgnite(event.getBlock(), event.getCause())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Cancelled BlockIgniteEvent on " + event.getBlock().getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Cancelled BlockIgniteEvent on " + event.getBlock().getWorld().getName());
         }
     }
 }

@@ -20,12 +20,13 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.command;
 
-import java.util.ArrayList;
+import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import java.util.ArrayList;
 
 /**
  * The Class CommandUtilities.
@@ -190,7 +191,7 @@ public class CommandUtilities {
     /**
      * Register commands.
      */
-    public static void registerCommands() {
-        thisPlugin.getCommand("wxw").setExecutor(new Wxw());
+    public static void registerCommands(Plugin plugin) {
+        ((WormholeXTremeWorlds) plugin).getCommand("wxw").setExecutor(new Wxw());
     }
 }

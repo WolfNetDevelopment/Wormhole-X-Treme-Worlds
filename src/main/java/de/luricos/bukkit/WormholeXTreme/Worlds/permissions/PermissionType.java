@@ -20,16 +20,18 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.permissions;
 
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
+import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
+
+import org.bukkit.entity.Player;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.bukkit.entity.Player;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
 
 /**
  * The Enum PermissionType.
@@ -56,12 +58,11 @@ public enum PermissionType {
     CREATE("wxw.admin.create"),
     /** The spawn permission. */
     SPAWN("wxw.spawn");
+    
     /** The permission node. */
     private final String permissionNode;
     /** The Constant permissionMap. */
     private static final Map<String, PermissionType> permissionMap = new HashMap<String, PermissionType>();
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
 
     static {
         for (final PermissionType type : EnumSet.allOf(PermissionType.class)) {
@@ -109,10 +110,10 @@ public enum PermissionType {
                 allowed = true;
             }
             if (allowed) {
-                thisPlugin.prettyLog(Level.FINE, false, "Player: \"" + player.getName() + "\" granted \"" + toString() + "\" permissions.");
+                WXLogger.prettyLog(Level.FINE, false, "Player: \"" + player.getName() + "\" granted \"" + toString() + "\" permissions.");
                 return true;
             }
-            thisPlugin.prettyLog(Level.FINE, false, "Player: \"" + player.getName() + "\" denied \"" + toString() + "\" permissions.");
+            WXLogger.prettyLog(Level.FINE, false, "Player: \"" + player.getName() + "\" denied \"" + toString() + "\" permissions.");
         }
         return false;
     }

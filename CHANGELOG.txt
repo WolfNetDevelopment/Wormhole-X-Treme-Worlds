@@ -1,7 +1,12 @@
+v0.505:
+  - refactored logging instance
+  - added Exception WorldsAutoloadException (there was an error in xml config!)
+  - added Exception WorldsConfigurationException (this will throw an error if something went wrong during shutdown)
+
 v0.5 :
+  - fixes for #953 compatibility
 
 v0.4 2011.04.24 09:20 PST:
-
 - Initial sticky chunk support. We allow plugins to register chunks that do not unload. When the chunk is no longer
   sticky, we schedule it for unloading. We properly catch and cancel the required chunk unload events.
 
@@ -17,6 +22,7 @@ v0.4 2011.04.24 09:20 PST:
 
 - Fixed typo in config loader for Neutral monster disable. 
 
+
 v0.3 2011.04.21 02:17 PST:
 
 - Added scheduler capabilities.
@@ -26,6 +32,7 @@ v0.3 2011.04.21 02:17 PST:
 - Added timelock. Uses scheduler. Now users can lock their worlds to day or night. Defaults to no timelock enabled. 
 
 - Added config.xml option to disable timelock and its scheduler. Defaults to scheduler enabled.
+
 
 v0.2.1 2011.04.20 04:38 PST:
 
@@ -38,8 +45,8 @@ v0.2.1 2011.04.20 04:38 PST:
 
 - Used new modular safespawn in a 3^3*9 setup for finding a safe location to drop player if nether spawn location is built over. Overkill, but ... 
 
-v0.2 - 2011.04.19 01:39 PST :
 
+v0.2 - 2011.04.19 01:39 PST :
 - Nether safe spawn generation has been completed. We scan up to (13^3)9 blocks for a safe place.
 
 - Added '/spawn' command with default hard disable via config file. 
@@ -55,11 +62,10 @@ v0.2 - 2011.04.19 01:39 PST :
 - Squids are now considered to be neutral mobs, and dealt with as they should be.
 
 v0.1.2 - 2011.04.17 08:41 PST :
-
 - Reverted optimization in prettyLog. Apparently causes problems on some setups.
 
-v0.1.1 - 2011.04.17 07:15 PST :
 
+v0.1.1 - 2011.04.17 07:15 PST :
 - We now store the world seed in our world config files. The seed value is based on what the world actually uses.
   This allows users to add worlds and have a valid seed stored in their config for later use. When the seed is a
   valid seed number (non 0) we call the world load with the specific seed. This way if someone wants to reset a
@@ -79,6 +85,7 @@ v0.1.1 - 2011.04.17 07:15 PST :
 - Fixed a few NPE when trying to teleport to a world that is not loaded.
 
 - Info command now shows world seed.
+
 
 v0.1 - 2011.04.16 06:48 PST :
 

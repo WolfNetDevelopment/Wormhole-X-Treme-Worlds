@@ -20,9 +20,17 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.command;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
+import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
+import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction.ActionType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WeatherLockType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,16 +39,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
-import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
-import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction.ActionType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WeatherLockType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
 
 /**
  * The wxw command class.
@@ -845,8 +846,9 @@ public class Wxw implements CommandExecutor {
         final String[] cleanArgs = CommandUtilities.commandCleaner(args);
         if (cleanArgs != null) {
             if (CommandUtilities.playerCheck(sender)) {
-                thisPlugin.prettyLog(Level.FINE, false, "Command \"wxw\" args: \"" + Arrays.toString(cleanArgs) + "\"");
+                WXLogger.prettyLog(Level.FINE, false, "Command \"wxw\" args: \"" + Arrays.toString(cleanArgs) + "\"");
             }
+            
             if (cleanArgs.length >= 1) {
                 if (cleanArgs[0].equalsIgnoreCase("list")) {
                     return doListWorlds(sender);

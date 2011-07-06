@@ -20,6 +20,16 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.config;
 
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOptionKeys;
+import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsConfigurationException;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WeatherLockType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
+
+import org.bukkit.plugin.PluginDescriptionFile;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,15 +48,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-
-import org.bukkit.plugin.PluginDescriptionFile;
-
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOptionKeys;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WeatherLockType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
+import org.bukkit.entity.Wolf;
 
 /**
  * The Class WormholeXTtremeWorldsConfig.
@@ -55,8 +57,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
  */
 public class XMLConfig {
 
-    /** The Constant thisPlugin. */
-    private final static WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
     /** The config file. */
     private static File configFile = null;
     /** The config directory. */
@@ -132,7 +132,7 @@ public class XMLConfig {
         final File deleteWorld = new File(getWorldConfigDirectory() + File.separator + worldName + ".xml");
         if (deleteWorld.exists()) {
             if (!deleteWorld.delete()) {
-                thisPlugin.prettyLog(Level.WARNING, false, "Unable to delete config file for world: " + worldName);
+                WXLogger.prettyLog(Level.WARNING, false, "Unable to delete config file for world: " + worldName);
             }
         }
     }
@@ -196,22 +196,22 @@ public class XMLConfig {
 
         if (!getConfigDirectory().exists()) {
             if (getConfigDirectory().mkdir()) {
-                thisPlugin.prettyLog(Level.CONFIG, false, "Created config directory: " + getConfigDirectory().toString());
+                WXLogger.prettyLog(Level.CONFIG, false, "Created config directory: " + getConfigDirectory().toString());
             } else {
-                thisPlugin.prettyLog(Level.SEVERE, false, "Uable to create config directory: " + getConfigDirectory().toString());
+                WXLogger.prettyLog(Level.SEVERE, true, "Uable to create config directory: " + getConfigDirectory().toString());
                 return false;
             }
         }
         if (!getWorldConfigDirectory().exists()) {
             if (getWorldConfigDirectory().mkdir()) {
-                thisPlugin.prettyLog(Level.CONFIG, false, "Created world config directory: " + getWorldConfigDirectory().toString());
+                WXLogger.prettyLog(Level.CONFIG, false, "Created world config directory: " + getWorldConfigDirectory().toString());
             } else {
-                thisPlugin.prettyLog(Level.SEVERE, false, "Uable to create world config directory: " + getWorldConfigDirectory().toString());
+                WXLogger.prettyLog(Level.SEVERE, true, "Uable to create world config directory: " + getWorldConfigDirectory().toString());
                 return false;
             }
         }
         if (!getConfigFile().exists()) {
-            thisPlugin.prettyLog(Level.WARNING, false, "No configuration file found, generating fresh.");
+            WXLogger.prettyLog(Level.WARNING, false, "No configuration file found, generating fresh.");
             FileOutputStream fileOutputStream = null;
             try {
                 fileOutputStream = new FileOutputStream(getConfigFile());
@@ -291,14 +291,14 @@ public class XMLConfig {
                     }
                 }
 
-                thisPlugin.prettyLog(Level.CONFIG, false, "Got from XML read: " + optionName + ", " + optionDescription + ", " + optionType + ", " + optionValue);
+                WXLogger.prettyLog(Level.CONFIG, false, "Got from XML read: " + optionName + ", " + optionDescription + ", " + optionType + ", " + optionValue);
                 ConfigManager.serverOptions.put(optionName, new ServerOption(optionName, optionDescription, optionType, optionValue));
             }
         }
         for (final ServerOption defaultOption : DefaultOptions.defaultServerOptions) {
             if (!ConfigManager.serverOptions.containsKey(defaultOption.getOptionKey())) {
                 ConfigManager.serverOptions.put(defaultOption.getOptionKey(), defaultOption);
-                thisPlugin.prettyLog(Level.CONFIG, false, "Added default config for missing ServerOption: " + defaultOption.getOptionKey().toString());
+                WXLogger.prettyLog(Level.CONFIG, false, "Added default config for missing ServerOption: " + defaultOption.getOptionKey().toString());
             }
         }
     }
@@ -346,7 +346,7 @@ public class XMLConfig {
                 }
             }
             if ((optionName != null) && (optionValue != null)) {
-                thisPlugin.prettyLog(Level.CONFIG, false, "Got from World XML read: " + optionName + ", " + optionType + ", " + optionValue);
+                WXLogger.prettyLog(Level.CONFIG, false, "Got from World XML read: " + optionName + ", " + optionType + ", " + optionValue);
                 if (optionName.equals("playerAllowContactDamage")) {
                     wormholeWorld.setPlayerAllowContactDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
                 } else if (optionName.equals("allowPlayerDamage") || optionName.equals("playerAllowDamage")) {
@@ -441,7 +441,7 @@ public class XMLConfig {
             try {
                 fileInputStream = new FileInputStream(getConfigFile());
                 readConfigFile(fileInputStream);
-                thisPlugin.prettyLog(Level.INFO, false, "Config Loaded");
+                WXLogger.prettyLog(Level.INFO, false, "Config Loaded");
             } finally {
                 try {
                     if (fileInputStream != null) {
@@ -458,7 +458,7 @@ public class XMLConfig {
                     try {
                         fileInputStream = new FileInputStream(worldFile);
                         readWorldConfigFile(fileInputStream);
-                        thisPlugin.prettyLog(Level.INFO, false, "World Config Loaded: " + worldFile.getName());
+                        WXLogger.prettyLog(Level.INFO, false, "World Config Loaded: " + worldFile.getName());
                     } finally {
                         try {
                             if (fileInputStream != null) {
@@ -623,7 +623,7 @@ public class XMLConfig {
             try {
                 fileOutputStream = new FileOutputStream(getConfigFile());
                 saveServerConfigFile(fileOutputStream, optionArray);
-                thisPlugin.prettyLog(Level.INFO, false, "Configuration saved.");
+                WXLogger.prettyLog(Level.INFO, false, "Configuration saved.");
 
             } finally {
                 try {
@@ -641,15 +641,24 @@ public class XMLConfig {
                     final String worldName = wormholeWorld.getWorldName();
                     FileOutputStream fileOutputStream = null;
                     try {
+                        // skip empty worldnames and throw WorldsConfigurationException
+                        if ((worldName == null) || ("".equals(worldName))) {
+                            throw new WorldsConfigurationException("Empty worldname found!. Please check your worlds configuration files.");
+                        }
+                        
                         fileOutputStream = new FileOutputStream(getWorldConfigDirectory() + File.separator + worldName + ".xml");
                         saveWorldConfigFile(fileOutputStream, wormholeWorld);
-                        thisPlugin.prettyLog(Level.INFO, false, "World Configuration saved: " + worldName);
+                        
+                        WXLogger.prettyLog(Level.INFO, false, "World Configuration saved: " + worldName);
+                    } catch (WorldsConfigurationException e) {
+                        WXLogger.prettyLog(Level.SEVERE, true, e.getMessage());
                     } finally {
                         try {
                             if (fileOutputStream != null) {
                                 fileOutputStream.close();
                             }
                         } catch (final IOException e) {
+                            
                         }
                     }
                 }

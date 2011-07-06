@@ -192,6 +192,11 @@ public class WormholeWorld {
         return worldSpawn;
     }
     
+    /**
+     * Get selected WoldEnvironment
+     * 
+     * @return null if nothing was set; this should lead into not loading the world via worldmanager
+     */
     public Environment getWorldEnvironment() {
         if (this.isWorldTypeNormal())
             return Environment.NORMAL;
@@ -207,6 +212,11 @@ public class WormholeWorld {
         return null;
     }
     
+    /**
+     * Get WorldType as string
+     * 
+     * @return 
+     */
     public String getWorldType() {
         return this.getWorldEnvironment().toString();
     }

@@ -20,16 +20,17 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.plugin;
 
-import java.util.logging.Level;
-
-import me.taylorkelly.help.Help;
+import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
+import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
+import me.taylorkelly.help.Help;
+
+import java.util.logging.Level;
 
 /**
  * The Class PluginUtilities.
@@ -50,7 +51,7 @@ public class HelpSupport {
         if (ConfigManager.getServerOptionHelp()) {
             if (PluginSupport.getHelp() != null) {
                 PluginSupport.setHelp(null);
-                thisPlugin.prettyLog(Level.INFO, false, "Detached from Help plugin.");
+                WXLogger.prettyLog(Level.INFO, false, "Detached from Help plugin.");
             }
         }
     }
@@ -65,20 +66,20 @@ public class HelpSupport {
                 if (helpTest != null) {
                     final String version = helpTest.getDescription().getVersion();
                     if (!version.startsWith("0.2")) {
-                        thisPlugin.prettyLog(Level.WARNING, false, "Not a support version of Help: " + version + " Recommended is: 0.2.x");
+                        WXLogger.prettyLog(Level.WARNING, false, "Not a support version of Help: " + version + " Recommended is: 0.2.x");
                     }
                     try {
                         PluginSupport.setHelp((Help) helpTest);
-                        thisPlugin.prettyLog(Level.INFO, false, "Attached to Help version: " + version);
+                        WXLogger.prettyLog(Level.INFO, false, "Attached to Help version: " + version);
                     } catch (final ClassCastException e) {
-                        thisPlugin.prettyLog(Level.WARNING, false, "Failed to get cast to Help: " + e.getMessage());
+                        WXLogger.prettyLog(Level.WARNING, false, "Failed to get cast to Help: " + e.getMessage());
                     }
                 } else {
-                    thisPlugin.prettyLog(Level.INFO, false, "Help plugin is not yet available; there will be no Help integration until it is loaded.");
+                    WXLogger.prettyLog(Level.INFO, false, "Help plugin is not yet available; there will be no Help integration until it is loaded.");
                 }
             }
         } else {
-            thisPlugin.prettyLog(Level.INFO, false, "Help Plugin support disabled via config.xml");
+            WXLogger.prettyLog(Level.INFO, false, "Help Plugin support disabled via config.xml");
         }
     }
 

@@ -20,16 +20,16 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.world;
 
-import java.util.logging.Level;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
-import org.bukkit.World;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.SpawnChangeEvent;
 import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.World;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import java.util.logging.Level;
 
 /**
  * The Class WorldEventHandler.
@@ -38,9 +38,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
  */
 public class WorldEventHandler extends WorldListener {
 
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
-
     /* (non-Javadoc)
      * @see org.bukkit.event.world.WorldListener#onChunkUnload(org.bukkit.event.world.ChunkUnloadEvent)
      */
@@ -48,7 +45,7 @@ public class WorldEventHandler extends WorldListener {
     public void onChunkUnload(final ChunkUnloadEvent event) {
         if (!event.isCancelled() && (event.getChunk() != null) && ChunkUnload.handleChunkUnload(event.getChunk())) {
             event.setCancelled(true);
-            thisPlugin.prettyLog(Level.FINE, false, "Chunk Unload Cancelled: " + event.getChunk().toString() + " World: " + event.getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Chunk Unload Cancelled: " + event.getChunk().toString() + " World: " + event.getWorld().getName());
         }
     }
 
@@ -58,7 +55,7 @@ public class WorldEventHandler extends WorldListener {
     @Override
     public void onSpawnChange(final SpawnChangeEvent event) {
         if (SpawnChange.handleSpawnChange(event.getWorld())) {
-            thisPlugin.prettyLog(Level.FINE, false, "Set worldSpawn to new location:" + event.getWorld().getSpawnLocation().toString() + " for world: " + event.getWorld().getName());
+            WXLogger.prettyLog(Level.FINE, false, "Set worldSpawn to new location:" + event.getWorld().getSpawnLocation().toString() + " for world: " + event.getWorld().getName());
         }
     }
 
@@ -69,7 +66,7 @@ public class WorldEventHandler extends WorldListener {
     public void onWorldLoad(final WorldLoadEvent event) {
         final World world = event.getWorld();
         if ((world != null) && WorldLoad.handleWorldLoad(world.getName())) {
-            thisPlugin.prettyLog(Level.FINE, false, "World Load caught and handled: " + world.getName());
+            WXLogger.prettyLog(Level.FINE, false, "World Load caught and handled: " + world.getName());
         }
     }
 
@@ -80,7 +77,7 @@ public class WorldEventHandler extends WorldListener {
     public void onWorldSave(final WorldSaveEvent event) {
         final World world = event.getWorld();
         if (world != null) {
-            thisPlugin.prettyLog(Level.FINE, false, "Caught World Save: " + world.getName());
+            WXLogger.prettyLog(Level.FINE, false, "Caught World Save: " + world.getName());
         }
     }
 }

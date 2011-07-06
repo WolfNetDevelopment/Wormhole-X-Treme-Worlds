@@ -42,6 +42,7 @@ public class WorldLoad {
             final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(worldName);
             return wormholeWorld.isWorldLoaded() ? false : WorldManager.loadWorld(wormholeWorld);
         }
+        
         return false;
     }
 }

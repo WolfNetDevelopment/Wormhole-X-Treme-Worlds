@@ -20,11 +20,11 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.scheduler;
 
-import java.util.logging.Level;
-
-import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
+import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
+
+import java.util.logging.Level;
 
 /**
  * The Class ScheduleAction.
@@ -49,8 +49,6 @@ public class ScheduleAction implements Runnable {
     private WormholeWorld wormholeWorld = null;
     /** The action type. */
     private ActionType actionType = null;
-    /** The Constant thisPlugin. */
-    private static final WormholeXTremeWorlds thisPlugin = WormholeXTremeWorlds.getThisPlugin();
 
     /**
      * Instantiates a new schedule action.
@@ -102,18 +100,18 @@ public class ScheduleAction implements Runnable {
             switch (getActionType()) {
                 case ClearEntities:
                     if (getWormholeWorld() != null) {
-                        thisPlugin.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\" WormholeWorld \"" + getWormholeWorld().getWorldName() + "\"");
+                        WXLogger.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\" WormholeWorld \"" + getWormholeWorld().getWorldName() + "\"");
                         WorldManager.clearWorldCreatures(getWormholeWorld());
                     }
                     break;
                 case SetWeather:
                     if (getWormholeWorld() != null) {
-                        thisPlugin.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\" WormholeWorld \"" + getWormholeWorld().getWorldName() + "\"");
+                        WXLogger.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\" WormholeWorld \"" + getWormholeWorld().getWorldName() + "\"");
                         WorldManager.setWorldWeather(getWormholeWorld());
                     }
                     break;
                 case TimeLock:
-                    thisPlugin.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\"");
+                    WXLogger.prettyLog(Level.FINE, false, "Schedule Action \"" + getActionType().toString() + "\"");
                     WorldManager.checkTimelockWorlds();
                     break;
                 default:
