@@ -39,6 +39,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsAutoloadException;
+import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsDuplicateUUIDException;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 
 /**
@@ -241,22 +242,31 @@ public class WorldManager {
      * @return true, if successful
      */
     public static boolean createWormholeWorld(final WormholeWorld wormholeWorld) {
-        if ((wormholeWorld != null) && !isWormholeWorld(wormholeWorld.getWorldName())) {
-            final String worldName = wormholeWorld.getWorldName();
-            final Environment worldEnvironment = wormholeWorld.getWorldEnvironment();
-            
-            if ("".equals(worldName)) {
-                return false;
-            }
-            
+        if ((wormholeWorld == null) && isWormholeWorld(wormholeWorld.getWorldName()))
+            return false;
+        
+        final String worldName = wormholeWorld.getWorldName();
+        final Environment worldEnvironment = wormholeWorld.getWorldEnvironment();
+
+        if ("".equals(worldName)) {
+            return false;
+        }
+
+        try {
             if (thisPlugin.getServer().getWorld(worldName) == null) {
-                if (wormholeWorld.getWorldSeed() != 0) {
-                    wormholeWorld.setWorld(thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment, wormholeWorld.getWorldSeed()));
-                } else {
-                    wormholeWorld.setWorld(thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment));
-                    wormholeWorld.setWorldSeed(wormholeWorld.getWorld().getSeed());
-                }
+                World world = ((wormholeWorld.getWorldSeed() == 0) 
+                        ? thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment)
+                        : thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment, wormholeWorld.getWorldSeed())
+                );
+
+                if (world == null)
+                    throw new WorldsDuplicateUUIDException("World '" + wormholeWorld.getWorldName() + "' is a duplicate of another world and has been prevented from loading. Please delete the uid.dat file from " + wormholeWorld.getWorldName() + "'s world directory if you want to be able to load the duplicate world.");
                 
+                wormholeWorld.setWorld(world);
+
+                if (wormholeWorld.getWorldSeed() == 0)
+                    wormholeWorld.setWorldSeed(wormholeWorld.getWorld().getSeed());
+
                 wormholeWorld.getWorld().save();
             } else {
                 wormholeWorld.setWorld(thisPlugin.getServer().getWorld(worldName));
@@ -274,16 +284,20 @@ public class WorldManager {
             if (!wormholeWorld.getWorldSpawn().equals(wormholeWorld.getWorld().getSpawnLocation())) {
                 wormholeWorld.getWorld().setSpawnLocation(tsX, tsY, tsZ);
             }
+            
             final int[] tempSpawn = {
                 tsX, tsY, tsZ
             };
+            
             wormholeWorld.setWorldCustomSpawn(tempSpawn);
             clearWorldCreatures(wormholeWorld);
             setWorldWeather(wormholeWorld);
             setWorldPvP(wormholeWorld);
-            
+
             wormholeWorld.setWorldLoaded(true);
             return addWorld(wormholeWorld);
+        } catch (WorldsDuplicateUUIDException e) {
+            WXLogger.prettyLog(Level.SEVERE, true, e.getMessage());
         }
         
         return false;
@@ -570,11 +584,15 @@ public class WorldManager {
                 throw new WorldsAutoloadException("Environment was undefined. Please check if at least Environment is set to true.");
             }
             
-            wormholeWorld.setWorld(
-                wormholeWorld.getWorldSeed() == 0
+            World world = ((wormholeWorld.getWorldSeed() == 0)
                 ? thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.getWorldEnvironment())
                 : thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.getWorldEnvironment(), wormholeWorld.getWorldSeed())
             );
+            
+            if (world == null)
+                throw new WorldsDuplicateUUIDException("World '" + wormholeWorld.getWorldName() + "' is a duplicate of another world and has been prevented from loading. Please delete the uid.dat file from " + wormholeWorld.getWorldName() + "'s world directory if you want to be able to load the duplicate world.");
+            
+            wormholeWorld.setWorld(world);
 
             wormholeWorld.getWorld().setSpawnLocation(wormholeWorld.getWorldCustomSpawn()[0], wormholeWorld.getWorldCustomSpawn()[1], wormholeWorld.getWorldCustomSpawn()[2]);
             wormholeWorld.setWorldSpawn(wormholeWorld.getWorld().getSpawnLocation());
@@ -598,6 +616,8 @@ public class WorldManager {
             }
         } catch (WorldsAutoloadException e) {
             WXLogger.prettyLog(Level.SEVERE, true, "WorldsAutoloadException: " + e.getMessage());
+        } catch (WorldsDuplicateUUIDException e) {
+            WXLogger.prettyLog(Level.SEVERE, true, "WorldsDuplicateUUIDException: " + e.getMessage());
         }
         
         return false;

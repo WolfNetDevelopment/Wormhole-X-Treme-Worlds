@@ -417,6 +417,7 @@ public class XMLConfig {
                 }
             }
         }
+        
         if ((wormholeWorld.getWorldName() != null) && (wormholeWorld.getWorldCustomSpawn() != null)) {
             WorldManager.addWorld(wormholeWorld);
         }

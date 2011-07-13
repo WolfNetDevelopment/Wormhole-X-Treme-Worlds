@@ -1,7 +1,8 @@
 v0.505:
   - refactored logging instance
   - added Exception WorldsAutoloadException (there was an error in xml config!)
-  - added Exception WorldsConfigurationException (this will throw an error if something went wrong during shutdown)
+  - added Exception WorldsConfigurationException (this will throw a severe if something went wrong during shutdown)
+  - added Exception WorldsDuplicateUUIDException (this will throw a severe if createWorld returns null [985]
 
 v0.5 :
   - fixes for #953 compatibility
