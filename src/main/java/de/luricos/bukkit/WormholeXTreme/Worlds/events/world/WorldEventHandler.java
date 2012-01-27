@@ -21,13 +21,14 @@
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.world;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
-
+import org.bukkit.World;
+import org.bukkit.event.Listener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.SpawnChangeEvent;
-import org.bukkit.event.world.WorldListener;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
-import org.bukkit.World;
 
 import java.util.logging.Level;
 
@@ -36,12 +37,12 @@ import java.util.logging.Level;
  * 
  * @author alron
  */
-public class WorldEventHandler extends WorldListener {
+public class WorldEventHandler implements Listener {
 
     /* (non-Javadoc)
      * @see org.bukkit.event.world.WorldListener#onChunkUnload(org.bukkit.event.world.ChunkUnloadEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.HIGH)
     public void onChunkUnload(final ChunkUnloadEvent event) {
         if (!event.isCancelled() && (event.getChunk() != null) && ChunkUnload.handleChunkUnload(event.getChunk())) {
             event.setCancelled(true);
@@ -52,7 +53,7 @@ public class WorldEventHandler extends WorldListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.world.WorldListener#onSpawnChange(org.bukkit.event.world.SpawnChangeEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onSpawnChange(final SpawnChangeEvent event) {
         if (SpawnChange.handleSpawnChange(event.getWorld())) {
             WXLogger.prettyLog(Level.FINE, false, "Set worldSpawn to new location:" + event.getWorld().getSpawnLocation().toString() + " for world: " + event.getWorld().getName());
@@ -62,7 +63,7 @@ public class WorldEventHandler extends WorldListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.world.WorldListener#onWorldLoad(org.bukkit.event.world.WorldLoadEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldLoad(final WorldLoadEvent event) {
         final World world = event.getWorld();
         if ((world != null) && WorldLoad.handleWorldLoad(world.getName())) {
@@ -73,7 +74,7 @@ public class WorldEventHandler extends WorldListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.world.WorldListener#onWorldSave(org.bukkit.event.world.WorldSaveEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldSave(final WorldSaveEvent event) {
         final World world = event.getWorld();
         if (world != null) {

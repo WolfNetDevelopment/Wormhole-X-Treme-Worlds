@@ -66,7 +66,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         
         XMLConfig.loadXmlConfig(this.getDescription());
         
-        WXLogger.prettyLog(Level.INFO, true, "Loading ompleted");
+        WXLogger.prettyLog(Level.INFO, true, "Loading completed");
     }    
     
     /* (non-Javadoc)

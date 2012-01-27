@@ -55,7 +55,7 @@ public enum ResponseType {
     NORMAL_CREATE_COMMAND_ARGS2(NORMAL_HEADER.toString() + "-pl(ayer) all,contact,drown,explosion,fall,fire,lava,lightning, "),
     NORMAL_CREATE_COMMAND_ARGS3(NORMAL_HEADER.toString() + "   suffocation,void"),
     NORMAL_CREATE_COMMAND_ARGS4(NORMAL_HEADER.toString() + "-wo(rld) fire,firespread,lavafire,lightningfire,pvp,waterspread,"),
-    NORMAL_CREATE_COMMAND_ARGS5(NORMAL_HEADER.toString() + "   firestart,hostiles,neutrals,autoload,\u00A76normal\u00A77,nether,skylands"),
+    NORMAL_CREATE_COMMAND_ARGS5(NORMAL_HEADER.toString() + "   firestart,hostiles,neutrals,autoload,\u00A76normal\u00A77,nether,the_end"),
     NORMAL_CREATE_COMMAND_ARGS6(NORMAL_HEADER.toString() + "-ti(me) (day|night) -we(ather) (clear|rain|storm)"),
     /** The COMMAND REQUIRES A WORLD NAME ERROR message. */
     ERROR_COMMAND_REQUIRES_WORLDNAME(ERROR_HEADER.toString() + "Command requires world name: "),

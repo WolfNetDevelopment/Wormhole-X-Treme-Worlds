@@ -18,13 +18,13 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.world;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The WormholeWorld instance. Everything that we know about a world can be found here.
@@ -80,7 +80,7 @@ public class WormholeWorld {
     /** The allow thunder. */
     private boolean worldAllowWeatherThunder = true;
     /** The autoconnect world. */
-    private boolean worldAutoload = true;
+    private boolean worldAutoload = false;
     /** The world custom spawn. */
     private int[] worldCustomSpawn = null;
     /** The loaded. */
@@ -101,8 +101,8 @@ public class WormholeWorld {
     private boolean worldTypeNormal = false;    
     /** The nether world. */
     private boolean worldTypeNether = false;
-    /** The skyland world */
-    private boolean worldTypeSkylands = false;
+    /** The end world */
+    private boolean worldTypeTheEnd = false;
     /** The weather lock. */
     private boolean worldWeatherLock = false;
     /** The weather lock type. */
@@ -204,21 +204,23 @@ public class WormholeWorld {
         if (this.isWorldTypeNether())
             return Environment.NETHER;
         
-        if (this.isWorldTypeSkylands())
-            return Environment.SKYLANDS;
-        
-        
+        if (this.isWorldTypeTheEnd())
+            return Environment.THE_END;
         
         return null;
     }
     
+    private String getWorldEnvironmentAsString() {
+        return (this.getWorldEnvironment() != null) ? this.getWorldEnvironment().toString() : "INVALID";
+    }
+    
     /**
      * Get WorldType as string
-     * 
-     * @return 
+     *
+     * @return Environtment as String
      */
     public String getWorldType() {
-        return this.getWorldEnvironment().toString();
+        return this.getWorldEnvironmentAsString();
     }
 
     /**
@@ -227,9 +229,7 @@ public class WormholeWorld {
      * @return the world spawn to int[]
      */
     public int[] getWorldSpawnToInt() {
-        return new int[]{
-                    (int) worldSpawn.getX(), (int) worldSpawn.getY(), (int) worldSpawn.getZ()
-                };
+        return new int[]{(int) worldSpawn.getX(), (int) worldSpawn.getY(), (int) worldSpawn.getZ()};
     }
 
     public ConcurrentHashMap<Chunk, ConcurrentHashMap<String, Integer>> getWorldStickyChunks() {
@@ -500,12 +500,12 @@ public class WormholeWorld {
     }
     
     /**
-     * Checks if this world is a SKYLANDS env.
+     * Checks if this world is a THE_END env.
      * 
-     * @return true, if this is a skylands world
+     * @return true, if this is a THE_END world
      */
-    public boolean isWorldTypeSkylands() {
-        return worldTypeSkylands;
+    public boolean isWorldTypeTheEnd() {
+        return worldTypeTheEnd;
     }    
 
     /**
@@ -666,7 +666,7 @@ public class WormholeWorld {
     /**
      * Sets the allow fire spread.
      * 
-     * @param allowFireSpread
+     * @param worldAllowFireSpread
      *            the new allow fire spread
      */
     public void setWorldAllowFireSpread(final boolean worldAllowFireSpread) {
@@ -676,7 +676,7 @@ public class WormholeWorld {
     /**
      * Sets the allow lava fire.
      * 
-     * @param allowWorldLavaFire
+     * @param worldAllowLavaFire
      *            the new allow lava fire
      */
     public void setWorldAllowLavaFire(final boolean worldAllowLavaFire) {
@@ -686,7 +686,7 @@ public class WormholeWorld {
     /**
      * Sets the allow lava spread.
      * 
-     * @param allowWorldLavaSpread
+     * @param worldAllowLavaSpread
      *            the new allow lava spread
      */
     public void setWorldAllowLavaSpread(final boolean worldAllowLavaSpread) {
@@ -696,7 +696,7 @@ public class WormholeWorld {
     /**
      * Sets the allow lightning fire.
      * 
-     * @param allowWorldLightningFire
+     * @param worldAllowLightningFire
      *            the new allow lightning fire
      */
     public void setWorldAllowLightningFire(final boolean worldAllowLightningFire) {
@@ -726,7 +726,7 @@ public class WormholeWorld {
     /**
      * Sets the allow hostiles.
      * 
-     * @param allowWorldSpawnHostiles
+     * @param worldAllowSpawnHostiles
      *            the allowHostiles to set
      */
     public void setWorldAllowSpawnHostiles(final boolean worldAllowSpawnHostiles) {
@@ -736,7 +736,7 @@ public class WormholeWorld {
     /**
      * Sets the allow neutrals.
      * 
-     * @param allowWorldSpawnNeutrals
+     * @param worldAllowSpawnNeutrals
      *            the allowNeutrals to set
      */
     public void setWorldAllowSpawnNeutrals(final boolean worldAllowSpawnNeutrals) {
@@ -746,7 +746,7 @@ public class WormholeWorld {
     /**
      * Sets the allow water spread.
      * 
-     * @param allowWaterSpread
+     * @param worldAllowWaterSpread
      *            the new allow water spread
      */
     public void setWorldAllowWaterSpread(final boolean worldAllowWaterSpread) {
@@ -756,7 +756,7 @@ public class WormholeWorld {
     /**
      * Sets the allow thunder.
      * 
-     * @param allowThunder
+     * @param worldAllowWeatherThunder
      *            the new allow thunder
      */
     public void setWorldAllowWeatherThunder(final boolean worldAllowWeatherThunder) {
@@ -766,7 +766,7 @@ public class WormholeWorld {
     /**
      * Sets the autoconnect world.
      * 
-     * @param autoconnectWorld
+     * @param worldAutoload
      *            the new autoconnect world
      */
     public void setWorldAutoload(final boolean worldAutoload) {
@@ -786,7 +786,7 @@ public class WormholeWorld {
     /**
      * Sets the world loaded.
      * 
-     * @param loaded
+     * @param worldLoaded
      *            the new world loaded
      */
     void setWorldLoaded(final boolean worldLoaded) {
@@ -826,7 +826,7 @@ public class WormholeWorld {
     /**
      * Sets the time lock type.
      * 
-     * @param timeLockType
+     * @param worldTimeLockType
      *            the new time lock type
      */
     public void setWorldTimeLockType(final TimeLockType worldTimeLockType) {
@@ -864,12 +864,12 @@ public class WormholeWorld {
     }
     
     /**
-     * Sets the skyland world.
+     * Sets the end world.
      * 
-     * @param worldTypeSkylands true or false
+     * @param worldTypeTheEnd true or false
      */
-    public void setWorldTypeSkylands(boolean worldTypeSkylands) {
-        this.worldTypeSkylands = worldTypeSkylands;
+    public void setWorldTypeTheEnd(boolean worldTypeTheEnd) {
+        this.worldTypeTheEnd = worldTypeTheEnd;
     }
 
     /**

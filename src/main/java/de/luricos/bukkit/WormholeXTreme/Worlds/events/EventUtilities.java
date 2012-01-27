@@ -20,15 +20,12 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginManager;
-
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.block.BlockEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.entity.EntityEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.weather.WeatherEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.world.WorldEventHandler;
+import org.bukkit.plugin.PluginManager;
 
 /**
  * The Class EventUtilities.
@@ -54,20 +51,9 @@ public class EventUtilities {
      * Register events.
      */
     public static void registerEvents() {
-        pluginManager.registerEvent(Event.Type.WORLD_LOAD, worldEventHandler, Priority.Monitor, thisPlugin);
-        pluginManager.registerEvent(Event.Type.WORLD_SAVE, worldEventHandler, Priority.Monitor, thisPlugin);
-        pluginManager.registerEvent(Event.Type.SPAWN_CHANGE, worldEventHandler, Priority.Monitor, thisPlugin);
-        pluginManager.registerEvent(Event.Type.CHUNK_UNLOAD, worldEventHandler, Priority.High, thisPlugin);
-
-        pluginManager.registerEvent(Event.Type.BLOCK_FROMTO, blockEventHandler, Priority.Lowest, thisPlugin);
-        pluginManager.registerEvent(Event.Type.BLOCK_IGNITE, blockEventHandler, Priority.Lowest, thisPlugin);
-        pluginManager.registerEvent(Event.Type.BLOCK_BURN, blockEventHandler, Priority.Lowest, thisPlugin);
-
-        pluginManager.registerEvent(Event.Type.CREATURE_SPAWN, entityEventHandler, Priority.Lowest, thisPlugin);
-        pluginManager.registerEvent(Event.Type.ENTITY_DAMAGE, entityEventHandler, Priority.Lowest, thisPlugin);
-
-        pluginManager.registerEvent(Event.Type.WEATHER_CHANGE, weatherEventHandler, Priority.Lowest, thisPlugin);
-        pluginManager.registerEvent(Event.Type.THUNDER_CHANGE, weatherEventHandler, Priority.Lowest, thisPlugin);
-        pluginManager.registerEvent(Event.Type.LIGHTNING_STRIKE, weatherEventHandler, Priority.Lowest, thisPlugin);
+        pluginManager.registerEvents(blockEventHandler, thisPlugin); // blockEvents
+        pluginManager.registerEvents(worldEventHandler, thisPlugin); // worldEvents
+        pluginManager.registerEvents(entityEventHandler, thisPlugin); // entityEvents
+        pluginManager.registerEvents(weatherEventHandler, thisPlugin); // weatherEvents
     }
 }

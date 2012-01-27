@@ -1,3 +1,9 @@
+v0.507
+  - fixes for 1.1-R1
+  - default world autoload value is now false when creating/importing a world
+  - changed description strings / messages
+  - you dont have to pass the world env any longer. This will be done automatically now.
+
 v0.505:
   - refactored logging instance
   - added Exception WorldsAutoloadException (there was an error in xml config!)

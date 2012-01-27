@@ -27,28 +27,15 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WeatherLockType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
-
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.xml.stream.*;
+import javax.xml.stream.events.XMLEvent;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
-
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLEventFactory;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
-import org.bukkit.entity.Wolf;
 
 /**
  * The Class WormholeXTtremeWorldsConfig.
@@ -410,8 +397,8 @@ public class XMLConfig {
                     wormholeWorld.setWorldTypeNormal(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
                 } else if (optionName.equals("netherWorld") || optionName.equals("worldTypeNether")) {
                     wormholeWorld.setWorldTypeNether(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("skylandsWorld") || optionName.equals("worldTypeSkylands")) {
-                    wormholeWorld.setWorldTypeSkylands(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                } else if (optionName.equals("theEndWorld") || optionName.equals("worldTypeTheEnd")) {
+                    wormholeWorld.setWorldTypeTheEnd(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
                 } else if (optionName.equals("weatherLockType") || optionName.equals("worldWeatherLockType")) {
                     wormholeWorld.setWorldWeatherLockType(WeatherLockType.getWeatherType(String.valueOf(optionValue).trim().toUpperCase()));
                 }
@@ -489,7 +476,7 @@ public class XMLConfig {
         createConfigNode(eventWriter, "worldName", "String", world.getWorldName(), "The name of this world. Do not change unless you have renamed the world on disk.");
         createConfigNode(eventWriter, "worldTypeNormal", "boolean", Boolean.valueOf(world.isWorldTypeNormal()).toString(), "Is this a normal world? BE SURE TO HAVE THIS RIGHT! Set only ONE type to true others to false!");
         createConfigNode(eventWriter, "worldTypeNether", "boolean", Boolean.valueOf(world.isWorldTypeNether()).toString(), "Is this a nether world? BE SURE TO HAVE THIS RIGHT! Set only ONE type to true others to false!");
-        createConfigNode(eventWriter, "worldTypeSkylands", "boolean", Boolean.valueOf(world.isWorldTypeSkylands()).toString(), "Is this a skylands world? BE SURE TO HAVE THIS RIGHT! Set only ONE type to true others to false!");
+        createConfigNode(eventWriter, "worldTypeTheEnd", "boolean", Boolean.valueOf(world.isWorldTypeTheEnd()).toString(), "Is this a the_end world? BE SURE TO HAVE THIS RIGHT! Set only ONE type to true others to false!");
         createConfigNode(eventWriter, "worldAutoload", "boolean", Boolean.valueOf(world.isWorldAutoload()).toString(), "Does this world automatically get loaded at server start? Non connected worlds can be loaded in game as needed.");
         createConfigNode(eventWriter, "worldAllowFire", "boolean", Boolean.valueOf(world.isWorldAllowFire()).toString(), "Is fire allowed on this world?");
         createConfigNode(eventWriter, "worldAllowFireSpread", "boolean", Boolean.valueOf(world.isWorldAllowFireSpread()).toString(), "Is fire spread allowed on this world?");

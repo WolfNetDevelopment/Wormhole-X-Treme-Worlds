@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The Class CommandUtilities.
@@ -162,12 +163,10 @@ public class CommandUtilities {
      * @return the string[]
      */
     static String[] commandRemover(final String[] args) {
-        String[] tempString = new String[0];
+        String[] tempString = new String[]{""};
         final ArrayList<String> argsMinusCommand = new ArrayList<String>();
         if (args.length > 1) {
-            for (int i = 1; i < args.length; i++) {
-                argsMinusCommand.add(args[i]);
-            }
+            argsMinusCommand.addAll(Arrays.asList(args).subList(1, args.length));
             tempString = argsMinusCommand.toArray(new String[argsMinusCommand.size()]);
         }
         return tempString;
@@ -181,11 +180,7 @@ public class CommandUtilities {
      * @return true, if successful
      */
     static boolean playerCheck(final CommandSender sender) {
-        if (sender instanceof Player) {
-            return true;
-        } else {
-            return false;
-        }
+        return (sender instanceof Player);
     }
 
     /**

@@ -51,13 +51,13 @@ public class BlockIgnite {
             } else if (igniteCause != null) {
                 switch (igniteCause) {
                     case LAVA:
-                        return wormholeWorld.isWorldAllowLavaFire() ? false : true;
+                        return !wormholeWorld.isWorldAllowLavaFire();
                     case SPREAD:
-                        return wormholeWorld.isWorldAllowFireSpread() ? false : true;
+                        return !wormholeWorld.isWorldAllowFireSpread();
                     case LIGHTNING:
-                        return wormholeWorld.isWorldAllowLightningFire() ? false : true;
+                        return !wormholeWorld.isWorldAllowLightningFire();
                     case FLINT_AND_STEEL:
-                        return wormholeWorld.isWorldAllowPlayerStartFire() ? false : true;
+                        return !wormholeWorld.isWorldAllowPlayerStartFire();
                     default:
                         break;
                 }

@@ -43,10 +43,10 @@ public class WeatherChange {
             if (wormholeWorld.isWorldWeatherLock()) {
                 switch (wormholeWorld.getWorldWeatherLockType()) {
                     case CLEAR:
-                        return rain ? true : false;
+                        return rain;
                     case RAIN:
                     case STORM:
-                        return rain ? false : true;
+                        return !rain;
                     case NONE:
                     default:
                         return false;

@@ -21,7 +21,9 @@
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.weather;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
-
+import org.bukkit.event.Listener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -34,12 +36,12 @@ import java.util.logging.Level;
  * 
  * @author alron
  */
-public class WeatherEventHandler extends WeatherListener {
+public class WeatherEventHandler implements Listener {
 
     /* (non-Javadoc)
      * @see org.bukkit.event.weather.WeatherListener#onLightningStrike(org.bukkit.event.weather.LightningStrikeEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onLightningStrike(final LightningStrikeEvent event) {
         WXLogger.prettyLog(Level.FINE, false, "Lightning Strike caught on world: " + event.getWorld().getName());
         if (!event.isCancelled() && LightningStrike.handleLightningStrike(event.getWorld().getName())) {
@@ -51,7 +53,7 @@ public class WeatherEventHandler extends WeatherListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.weather.WeatherListener#onThunderChange(org.bukkit.event.weather.ThunderChangeEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onThunderChange(final ThunderChangeEvent event) {
         WXLogger.prettyLog(Level.FINE, false, "Thunder Change caught on world: " + event.getWorld().getName() + " state: " + event.toThunderState());
         if (!event.isCancelled() && ThunderChange.handleThunderChange(event.getWorld().getName(), event.toThunderState())) {
@@ -63,7 +65,7 @@ public class WeatherEventHandler extends WeatherListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.weather.WeatherListener#onWeatherChange(org.bukkit.event.weather.WeatherChangeEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onWeatherChange(final WeatherChangeEvent event) {
         WXLogger.prettyLog(Level.FINE, false, "Weather Change caught on world: " + event.getWorld().getName() + " state: " + event.toWeatherState());
         if (!event.isCancelled() && WeatherChange.handleWeatherChange(event.getWorld().getName(), event.toWeatherState())) {

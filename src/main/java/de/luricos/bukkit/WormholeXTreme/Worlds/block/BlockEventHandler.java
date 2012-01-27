@@ -21,11 +21,12 @@
 package de.luricos.bukkit.WormholeXTreme.Worlds.block;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
-
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.block.BlockListener;
 
 import java.util.logging.Level;
 
@@ -34,12 +35,12 @@ import java.util.logging.Level;
  * 
  * @author alron
  */
-public class BlockEventHandler extends BlockListener {
+public class BlockEventHandler implements Listener {
 
     /* (non-Javadoc)
      * @see org.bukkit.event.block.BlockListener#onBlockBurn(org.bukkit.event.block.BlockBurnEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBurn(final BlockBurnEvent event) {
         if (!event.isCancelled() && (event.getBlock() != null) && BlockBurn.handleBlockBurn(event.getBlock())) {
             event.setCancelled(true);
@@ -50,7 +51,7 @@ public class BlockEventHandler extends BlockListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.block.BlockListener#onBlockFromTo(org.bukkit.event.block.BlockFromToEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockFromTo(final BlockFromToEvent event) {
         if (!event.isCancelled() && (event.getBlock() != null) && BlockFromTo.handleBlockFromTo(event.getBlock())) {
             event.setCancelled(true);
@@ -61,7 +62,7 @@ public class BlockEventHandler extends BlockListener {
     /* (non-Javadoc)
      * @see org.bukkit.event.block.BlockListener#onBlockIgnite(org.bukkit.event.block.BlockIgniteEvent)
      */
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockIgnite(final BlockIgniteEvent event) {
         if (!event.isCancelled() && (event.getBlock() != null) && BlockIgnite.handleBlockIgnite(event.getBlock(), event.getCause())) {
             event.setCancelled(true);

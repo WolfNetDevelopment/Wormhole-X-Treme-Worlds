@@ -48,39 +48,43 @@ public class EntityDamage {
      */
     public static boolean handleEntityDamage(final Player player, final DamageCause cause, final Entity damager) {
         final WormholeWorld wormholeWorld = WorldManager.getWorldFromPlayer(player);
-        if ((wormholeWorld != null)) {
-            if (!wormholeWorld.isPlayerAllowDamage()) {
-                playerStopFire(player);
-                playerStopDrown(player);
-                return true;
-            } else if (cause != null) {
-                switch (cause) {
-                    case CONTACT:
-                        return wormholeWorld.isPlayerAllowContactDamage() ? false : true;
-                    case ENTITY_ATTACK:
-                        return wormholeWorld.isWorldAllowPvP() ? false : playerStopPvP(damager);
-                    case SUFFOCATION:
-                        return wormholeWorld.isPlayerAllowSuffocation() ? false : true;
-                    case FALL:
-                        return wormholeWorld.isPlayerAllowFallDamage() ? false : true;
-                    case FIRE:
-                    case FIRE_TICK:
-                        return wormholeWorld.isPlayerAllowFireDamage() ? false : playerStopFire(player);
-                    case LAVA:
-                        return wormholeWorld.isPlayerAllowLavaDamage() ? false : playerStopFire(player);
-                    case DROWNING:
-                        return wormholeWorld.isPlayerAllowDrown() ? false : playerStopDrown(player);
-                    case BLOCK_EXPLOSION:
-                    case ENTITY_EXPLOSION:
-                        return wormholeWorld.isPlayerAllowExplosionDamage() ? false : true;
-                    case VOID:
-                        return wormholeWorld.isPlayerAllowVoidDamage() ? false : true;
-                    case LIGHTNING:
-                        return wormholeWorld.isPlayerAllowLightningDamage() ? false : playerStopFire(player);
-                    default:
-                        break;
-                }
-            }
+
+        if (!wormholeWorld.isPlayerAllowDamage()) {
+            playerStopFire(player);
+            playerStopDrown(player);
+            return true;
+        }
+
+        if ((wormholeWorld == null) || (cause == null))
+            return false;
+
+        switch (cause) {
+            case CONTACT:
+                return !wormholeWorld.isPlayerAllowContactDamage();
+            case ENTITY_ATTACK:
+                return !wormholeWorld.isWorldAllowPvP() && playerStopPvP(damager);
+            case SUFFOCATION:
+                return !wormholeWorld.isPlayerAllowSuffocation();
+            case FALL:
+                return !wormholeWorld.isPlayerAllowFallDamage();
+            case FIRE:
+            case FIRE_TICK:
+                return !wormholeWorld.isPlayerAllowFireDamage() && playerStopFire(player);
+            case LAVA:
+                return !wormholeWorld.isPlayerAllowLavaDamage() && playerStopFire(player);
+            case DROWNING:
+                return !wormholeWorld.isPlayerAllowDrown() && playerStopDrown(player);
+            case BLOCK_EXPLOSION:
+            case ENTITY_EXPLOSION:
+                return !wormholeWorld.isPlayerAllowExplosionDamage();
+            case VOID:
+                return !wormholeWorld.isPlayerAllowVoidDamage();
+            case LIGHTNING:
+                return !wormholeWorld.isPlayerAllowLightningDamage() && playerStopFire(player);
+            case STARVATION:
+                break;
+            default:
+                break;
         }
         return false;
     }

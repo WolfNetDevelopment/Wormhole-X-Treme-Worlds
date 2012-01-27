@@ -44,9 +44,9 @@ public class ThunderChange {
                 switch (wormholeWorld.getWorldWeatherLockType()) {
                     case CLEAR:
                     case RAIN:
-                        return thunder ? true : false;
+                        return thunder;
                     case STORM:
-                        return thunder ? false : true;
+                        return !thunder;
                     case NONE:
                     default:
                         return false;

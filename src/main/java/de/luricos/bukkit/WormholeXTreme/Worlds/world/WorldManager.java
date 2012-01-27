@@ -18,29 +18,30 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.world;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Flying;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.WaterMob;
-
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsAutoloadException;
 import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsDuplicateUUIDException;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
+import org.bukkit.entity.WaterMob;
+import org.bukkit.entity.Flying;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * The Class WorldManager.
@@ -97,8 +98,8 @@ public class WorldManager {
      */
     private static boolean checkSafeBlock(final Block safeBlock) {
         if (safeBlock != null) {
-            final int typeId = safeBlock.getTypeId();
-            return checkSafeTypeId(typeId);
+            Material material = safeBlock.getType();
+            return checkSafeMaterial(material);
         }
         return false;
     }
@@ -112,8 +113,8 @@ public class WorldManager {
      */
     private static boolean checkSafeBlockAbove(final Block safeBlock) {
         if (safeBlock != null) {
-            final int typeId = safeBlock.getFace(BlockFace.UP).getTypeId();
-            return checkSafeTypeId(typeId);
+            Material material = safeBlock.getRelative(BlockFace.UP).getType();
+            return checkSafeMaterial(material);
         }
         return false;
     }
@@ -127,7 +128,7 @@ public class WorldManager {
      */
     private static boolean checkSafeBlockBelow(final Block safeBlock) {
         if (safeBlock != null) {
-            final int typeId = safeBlock.getFace(BlockFace.DOWN).getTypeId();
+            final int typeId = safeBlock.getRelative(BlockFace.DOWN).getTypeId();
             return checkNonSafeTypeId(typeId);
         }
         return false;
@@ -151,17 +152,15 @@ public class WorldManager {
     }
 
     /**
-     * Check safe type id.
+     * Check safe material.
      * 
-     * @param typeId
-     *            the type id
+     * @param material
+     *            the material
      * @return true, if successful
      */
-    private static boolean checkSafeTypeId(final int typeId) {
-        if ((typeId == 0) || (typeId == 8) || (typeId == 9) || (typeId == 66)) {
-            return true;
-        }
-        return false;
+    private static boolean checkSafeMaterial(Material material) {
+        //AIR,WATER,STATIONARY_WATER,RAILS
+        return (material.equals(Material.AIR)) || (material.equals(Material.WATER)) || (material.equals(Material.STATIONARY_WATER)) || (material.equals(Material.RAILS));
     }
 
     /**
@@ -225,8 +224,8 @@ public class WorldManager {
             case NETHER:
                 wormholeWorld.setWorldTypeNether(true);
                 break;
-            case SKYLANDS:
-                wormholeWorld.setWorldTypeSkylands(true);
+            case THE_END:
+                wormholeWorld.setWorldTypeTheEnd(true);
                 break;
         }
         
@@ -255,8 +254,8 @@ public class WorldManager {
         try {
             if (thisPlugin.getServer().getWorld(worldName) == null) {
                 World world = ((wormholeWorld.getWorldSeed() == 0) 
-                        ? thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment)
-                        : thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), worldEnvironment, wormholeWorld.getWorldSeed())
+                        ? thisPlugin.getServer().createWorld(new WorldCreator(wormholeWorld.getWorldName()).environment(worldEnvironment))
+                        : thisPlugin.getServer().createWorld(new WorldCreator(wormholeWorld.getWorldName()).environment(worldEnvironment).seed(wormholeWorld.getWorldSeed()))
                 );
 
                 if (world == null)
@@ -273,7 +272,7 @@ public class WorldManager {
                 wormholeWorld.setWorldSeed(wormholeWorld.getWorld().getSeed());
             }
 
-            wormholeWorld.setWorldSpawn(wormholeWorld.isWorldTypeNether() || wormholeWorld.isWorldTypeSkylands()
+            wormholeWorld.setWorldSpawn(wormholeWorld.isWorldTypeNether() || wormholeWorld.isWorldTypeTheEnd()
                     ? findSafeSpawn(wormholeWorld.getWorld().getSpawnLocation(), 13, 13)
                     : wormholeWorld.getWorld().getSpawnLocation());
 
@@ -426,8 +425,8 @@ public class WorldManager {
                 for (int z = 0; z < xzAxisDepth; z++) {
                     final Block tmpBlock = tmpBlockArr[x][z];
                     if (tmpBlock != null) {
-                        final int typeId = tmpBlock.getTypeId();
-                        if (checkSafeTypeId(typeId) && checkSafeBlockAbove(tmpBlock) && checkSafeBlockBelow(tmpBlock)) {
+                        Material material = tmpBlock.getType();
+                        if (checkSafeMaterial(material) && checkSafeBlockAbove(tmpBlock) && checkSafeBlockBelow(tmpBlock)) {
                             blockYaxisPlane.clear();
                             return new Location(tmpBlock.getWorld(), tmpBlock.getX() + 0.5, tmpBlock.getY(), tmpBlock.getZ() + 0.5);
                         }
@@ -468,7 +467,7 @@ public class WorldManager {
      */
     public static Location getSafeSpawnLocation(final WormholeWorld wormholeWorld, final Player player) {
         return (
-                wormholeWorld.isWorldTypeNether() || wormholeWorld.isWorldTypeSkylands()
+                wormholeWorld.isWorldTypeNether() || wormholeWorld.isWorldTypeTheEnd()
                 ? (
                     WorldManager.checkSafeTeleportDestination(wormholeWorld.getWorldSpawn())
                     ? new Location(wormholeWorld.getWorld(), wormholeWorld.getWorldSpawn().getBlockX() + 0.5, wormholeWorld.getWorldSpawn().getBlockY(), wormholeWorld.getWorldSpawn().getBlockZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch())
@@ -528,10 +527,7 @@ public class WorldManager {
      * @return true, if is wormhole world
      */
     public static boolean isWormholeWorld(final String worldName) {
-        if ((worldName != null) && worldList.containsKey(worldName)) {
-            return true;
-        }
-        return false;
+        return (worldName != null) && worldList.containsKey(worldName);
     }
 
     /**
@@ -542,10 +538,7 @@ public class WorldManager {
      * @return true, if is wormhole world
      */
     public static boolean isWormholeWorld(final World world) {
-        if ((world != null) && worldList.containsKey(world.getName())) {
-            return true;
-        }
-        return false;
+        return world != null && worldList.containsKey(world.getName());
     }
 
     /**
@@ -582,11 +575,11 @@ public class WorldManager {
             
             if (wormholeWorld.getWorldEnvironment() == null) {
                 throw new WorldsAutoloadException("Environment was undefined. Please check if at least Environment is set to true.");
-            }
+            }           
             
             World world = ((wormholeWorld.getWorldSeed() == 0)
-                ? thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.getWorldEnvironment())
-                : thisPlugin.getServer().createWorld(wormholeWorld.getWorldName(), wormholeWorld.getWorldEnvironment(), wormholeWorld.getWorldSeed())
+                ? thisPlugin.getServer().createWorld(new WorldCreator(wormholeWorld.getWorldName()).environment(wormholeWorld.getWorldEnvironment()))
+                : thisPlugin.getServer().createWorld(new WorldCreator(wormholeWorld.getWorldName()).environment(wormholeWorld.getWorldEnvironment()).seed(wormholeWorld.getWorldSeed()))
             );
             
             if (world == null)

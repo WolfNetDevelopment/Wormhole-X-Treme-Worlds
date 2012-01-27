@@ -23,3 +23,12 @@
 
 # Mac filesystem dust
 /.DS_Store
+
+/TODO
+/TODO.*
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/
