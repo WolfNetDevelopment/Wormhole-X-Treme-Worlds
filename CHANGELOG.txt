@@ -1,3 +1,7 @@
+v0.508
+  - /wxw info now works without an argument (defaults to player world)
+  - fixed compatibility issues with wxt
+
 v0.507
   - fixes for 1.1-R1
   - default world autoload value is now false when creating/importing a world

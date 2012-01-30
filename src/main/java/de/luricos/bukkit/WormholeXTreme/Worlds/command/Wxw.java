@@ -37,6 +37,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -237,7 +238,8 @@ public class Wxw implements CommandExecutor {
                         sender.sendMessage(ResponseType.ERROR_COMMAND_REQUIRES_WORLDNAME.toString() + "create");
                         return true;
                     }
-                    
+
+                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "The world '" + wormholeWorld.getWorldName() + "' will be created now. Please standby...");
                     if (WorldManager.createWormholeWorld(wormholeWorld)) {
                         // fetch worldType from world
                         if (!definedWorldType) {
@@ -323,34 +325,27 @@ public class Wxw implements CommandExecutor {
      *            the args
      * @return true, if successful
      */
-    private static boolean doInfoWorld(final CommandSender sender, final String[] args) {
-        boolean allowed = false;
-        if (CommandUtilities.playerCheck(sender)) {
-            allowed = PermissionType.INFO.checkPermission((Player) sender);
-        } else {
-            allowed = true;
-        }
-        if (allowed) {
-            if (CommandUtilities.playerCheck(sender) || ((args != null) && (args.length == 1))) {
-                final WormholeWorld world = args.length == 0 ? WorldManager.getWorldFromPlayer((Player) sender)
-                        : WorldManager.getWormholeWorld(args[0]);
-                if (world != null) {
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A76=======================\u00A7fINFO\u00A76=======================");
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fWorld:\u00A7b" + world.getWorldName() + " \u00A7fType:\u00A7b" + ((world.getWorldEnvironment() != null) ? "" : ChatColor.RED) + world.getWorldType() + " \u00A7fTime:\u00A7b" + world.getWorldTimeLockType().toString());
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fAutoload:" + colorizeBoolean(world.isWorldAutoload()) + " \u00A7fSeed:\u00A7b" + world.getWorldSeed() + " \u00A7fWeather:\u00A7b" + world.getWorldWeatherLockType().toString());
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A76=================\u00A7fWORLD PROTECTION\u00A76=================");
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fHostiles:" + colorizeBoolean(world.isWorldAllowSpawnHostiles()) + " \u00A7fNeutrals:" + colorizeBoolean(world.isWorldAllowSpawnNeutrals()) + " \u00A7fFireSPRD:" + colorizeBoolean(world.isWorldAllowFireSpread()) + " \u00A7fLavaFIRE:" + colorizeBoolean(world.isWorldAllowLavaFire()));
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fWaterSPRD:" + colorizeBoolean(world.isWorldAllowWaterSpread()) + " \u00A7fLightningFIRE:" + colorizeBoolean(world.isWorldAllowLightningFire()) + " \u00A7fLavaSPRD:" + colorizeBoolean(world.isWorldAllowLavaSpread()));
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A76=================\u00A7fPLAYER PROTECTION\u00A76================");
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fDrown:" + colorizeBoolean(world.isPlayerAllowDrown()) + " \u00A7fLavaDMG:" + colorizeBoolean(world.isPlayerAllowLavaDamage()) + " \u00A7fFallDMG:" + colorizeBoolean(world.isPlayerAllowFallDamage()) + " \u00A7fLgtngDMG:" + colorizeBoolean(world.isPlayerAllowLightningDamage()));
-                    sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fFireDMG:" + colorizeBoolean(world.isPlayerAllowFireDamage()) + " \u00A7fPvPDMG:" + colorizeBoolean(world.isWorldAllowPvP()) + " \u00A7fAllDMG:" + colorizeBoolean(world.isPlayerAllowDamage()));
+    private static boolean doInfoWorld(CommandSender sender, final String[] args) {
+        if (sender instanceof ConsoleCommandSender)
+            return true;
 
-                } else {
-                    sender.sendMessage(ResponseType.ERROR_WORLD_NOT_EXIST.toString() + args[0]);
-                    sender.sendMessage(ResponseType.ERROR_WORLD_MAY_BE_ON_DISK.toString());
-                }
+        boolean allowed = !CommandUtilities.playerCheck(sender) || PermissionType.INFO.checkPermission((Player) sender);
+
+        if (allowed) {
+            WormholeWorld world = (args[0].equals("")) ? WorldManager.getWorldFromPlayer((Player) sender) : WorldManager.getWormholeWorld(args[0]);
+            if (world != null) {
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A76=======================\u00A7fINFO\u00A76=======================");
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fWorld:\u00A7b" + world.getWorldName() + " \u00A7fType:\u00A7b" + ((world.getWorldEnvironment() != null) ? "" : ChatColor.RED) + world.getWorldType() + " \u00A7fTime:\u00A7b" + world.getWorldTimeLockType().toString());
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fAutoload:" + colorizeBoolean(world.isWorldAutoload()) + " \u00A7fSeed:\u00A7b" + world.getWorldSeed() + " \u00A7fWeather:\u00A7b" + world.getWorldWeatherLockType().toString());
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A76=================\u00A7fWORLD PROTECTION\u00A76=================");
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fHostiles:" + colorizeBoolean(world.isWorldAllowSpawnHostiles()) + " \u00A7fNeutrals:" + colorizeBoolean(world.isWorldAllowSpawnNeutrals()) + " \u00A7fFireSPRD:" + colorizeBoolean(world.isWorldAllowFireSpread()) + " \u00A7fLavaFIRE:" + colorizeBoolean(world.isWorldAllowLavaFire()));
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fWaterSPRD:" + colorizeBoolean(world.isWorldAllowWaterSpread()) + " \u00A7fLightningFIRE:" + colorizeBoolean(world.isWorldAllowLightningFire()) + " \u00A7fLavaSPRD:" + colorizeBoolean(world.isWorldAllowLavaSpread()));
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A76=================\u00A7fPLAYER PROTECTION\u00A76================");
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fDrown:" + colorizeBoolean(world.isPlayerAllowDrown()) + " \u00A7fLavaDMG:" + colorizeBoolean(world.isPlayerAllowLavaDamage()) + " \u00A7fFallDMG:" + colorizeBoolean(world.isPlayerAllowFallDamage()) + " \u00A7fLgtngDMG:" + colorizeBoolean(world.isPlayerAllowLightningDamage()));
+                sender.sendMessage(ResponseType.NORMAL_HEADER.toString() + "\u00A7fFireDMG:" + colorizeBoolean(world.isPlayerAllowFireDamage()) + " \u00A7fPvPDMG:" + colorizeBoolean(world.isWorldAllowPvP()) + " \u00A7fAllDMG:" + colorizeBoolean(world.isPlayerAllowDamage()));
             } else {
-                sender.sendMessage(ResponseType.ERROR_COMMAND_REQUIRES_WORLDNAME.toString() + "info");
+                sender.sendMessage(ResponseType.ERROR_WORLD_NOT_EXIST.toString() + args[0]);
+                sender.sendMessage(ResponseType.ERROR_WORLD_MAY_BE_ON_DISK.toString());
             }
         } else {
             sender.sendMessage(ResponseType.ERROR_PERMISSION_NO.toString());

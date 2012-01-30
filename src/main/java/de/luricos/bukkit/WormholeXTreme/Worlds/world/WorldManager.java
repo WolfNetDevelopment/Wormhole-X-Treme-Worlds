@@ -574,7 +574,7 @@ public class WorldManager {
             }
             
             if (wormholeWorld.getWorldEnvironment() == null) {
-                throw new WorldsAutoloadException("Environment was undefined. Please check if at least Environment is set to true.");
+                throw new WorldsAutoloadException("Environment was undefined. Please check if at least Environment is set to NORMAL.");
             }           
             
             World world = ((wormholeWorld.getWorldSeed() == 0)
