@@ -1,8 +1,8 @@
 name: WormholeXTremeWorlds
 main: de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds
-version: 0.508
-author: alron
-softdepend: [Permissions, Help]
+version: 0.509
+authors: [alron, lycano]
+softdepend: [PermissionsEx, Help]
 description: >
              Wormhole X-Treme Worlds! World management for Wormhole X-Treme!
              

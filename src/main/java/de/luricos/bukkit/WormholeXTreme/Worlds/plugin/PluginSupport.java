@@ -24,7 +24,8 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 
 import me.taylorkelly.help.Help;
 
-import com.nijiko.permissions.PermissionHandler;
+import ru.tehkode.permissions.PermissionManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import java.util.Map;
  */
 public class PluginSupport {
     public enum SupportedPlugin {
-        PERMISSIONS("Permissions"),
+        PERMISSIONS("PermissionsEx"),
         HELP("Help");
 
         private final String name;
@@ -62,7 +63,7 @@ public class PluginSupport {
     /** The help. */
     private static Help help = null;
     /** The permission handler. */
-    private static PermissionHandler permissionHandler = null;
+    private static PermissionManager permissionHandler = null;
 
     /**
      * Gets the help.
@@ -78,7 +79,7 @@ public class PluginSupport {
      * 
      * @return the permission handler
      */
-    public static PermissionHandler getPermissionHandler() {
+    public static PermissionManager getPermissionHandler() {
         return permissionHandler;
     }
 
@@ -98,11 +99,11 @@ public class PluginSupport {
 
     /**
      * Sets the permission handler.
-     * 
+     *
      * @param permissionHandler
      *            the new permission handler
      */
-    public static void setPermissionHandler(final PermissionHandler permissionHandler) {
+    public static void setPermissionHandler(final PermissionManager permissionHandler) {
         PluginSupport.permissionHandler = permissionHandler;
     }
     

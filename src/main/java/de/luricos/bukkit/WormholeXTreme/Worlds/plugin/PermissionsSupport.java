@@ -23,11 +23,9 @@ package de.luricos.bukkit.WormholeXTreme.Worlds.plugin;
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
-
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import com.nijikokun.bukkit.Permissions.Permissions;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.util.logging.Level;
 
@@ -59,24 +57,25 @@ public class PermissionsSupport {
     public static void enablePermissions() {
         if (ConfigManager.getServerOptionPermissions()) {
             if (PluginSupport.getPermissionHandler() == null) {
-                final Plugin test = pluginManager.getPlugin("Permissions");
+                final Plugin test = pluginManager.getPlugin("PermissionsEx");
                 if (test != null) {
-                    final String version = test.getDescription().getVersion();
-                    if (!version.startsWith("2.5") && !version.startsWith("2.6") && !version.startsWith("2.7") && !version.startsWith("3.0")) {
-                        WXLogger.prettyLog(Level.WARNING, false, "Not a supported version of Permissions. Recommended is 3.0.x");
+                    Double version = Double.parseDouble(test.getDescription().getVersion());
+                    if (version < 1.8) {
+                        WXLogger.prettyLog(Level.WARNING, false, "Found a not supported version of PermissionsEx. Recommended is at least 1.18");
                     }
+                    
                     try {
-                        PluginSupport.setPermissionHandler(((Permissions) test).getHandler());
-                        WXLogger.prettyLog(Level.INFO, false, "Attached to Permissions version " + version);
+                        PluginSupport.setPermissionHandler(PermissionsEx.getPermissionManager());
+                        WXLogger.prettyLog(Level.INFO, false, "Attached to PermissionsEx version " + version.toString());
                     } catch (final ClassCastException e) {
-                        WXLogger.prettyLog(Level.WARNING, false, "Failed to get cast to Permissions: " + e.getMessage());
+                        WXLogger.prettyLog(Level.WARNING, false, "Failed to attach to PermissionsEx: " + e.getMessage());
                     }
                 } else {
-                    WXLogger.prettyLog(Level.INFO, false, "Permission Plugin not yet available.");
+                    WXLogger.prettyLog(Level.INFO, false, "Permissions Plugin not yet available.");
                 }
             }
         } else {
-            WXLogger.prettyLog(Level.INFO, false, "Permission Plugin support disabled via config.xml");
+            WXLogger.prettyLog(Level.INFO, false, "Permissions Plugin support disabled via config.xml");
         }
     }
 }

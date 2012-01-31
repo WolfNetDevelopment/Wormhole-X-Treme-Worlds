@@ -34,7 +34,7 @@ public enum ResponseType {
     /** The ERROR HEADER for error messages. */
     ERROR_HEADER(HEADER.toString() + "\u00A75error " + NORMAL_HEADER.toString()),
     /** The NO PERMISSION ERROR message. */
-    ERROR_PERMISSION_NO(ERROR_HEADER.toString() + "You lack the permissions to do this."),
+    ERROR_PERMISSION_NO(ERROR_HEADER.toString() + "You lack the permission to do this."),
     /** The IN GAME ONLY ERROR message. */
     ERROR_IN_GAME_ONLY(ERROR_HEADER.toString() + "This command requires a player to call it, not a console."),
     /** The WORLD DOES NOT EXIST ERROR message. */

@@ -1,3 +1,6 @@
+v0.509
+  - replaced old Permissions with PermissionsEx
+
 v0.508
   - /wxw info now works without an argument (defaults to player world)
   - fixed compatibility issues with wxt
