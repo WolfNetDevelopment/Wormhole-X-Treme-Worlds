@@ -51,6 +51,23 @@ public class PermissionsSupport {
         }
     }
 
+    public static boolean isSupportedVersion(String verIn) {
+        String comp1 = verIn.replaceAll("\\.", "");
+        int subVCount = verIn.length() - comp1.length();
+        Double minVer = 1.18;
+
+        if ((subVCount < 2) && (Double.parseDouble(verIn) >= minVer))
+            return true;
+
+        if ((subVCount < 2) && (Double.parseDouble(verIn) < minVer))
+            return false;
+
+        int firstMatch = verIn.indexOf(".");
+        String verOut = verIn.substring(0, firstMatch) + "." + comp1.substring(firstMatch);
+        
+        return Double.parseDouble(verOut) >= minVer;
+    }
+    
     /**
      * Enable permissions.
      */
@@ -59,9 +76,10 @@ public class PermissionsSupport {
             if (PluginSupport.getPermissionHandler() == null) {
                 final Plugin test = pluginManager.getPlugin("PermissionsEx");
                 if (test != null) {
-                    Double version = Double.parseDouble(test.getDescription().getVersion());
-                    if (version < 1.8) {
-                        WXLogger.prettyLog(Level.WARNING, false, "Found a not supported version of PermissionsEx. Recommended is at least 1.18");
+                    String version = test.getDescription().getVersion();
+                    
+                    if (!isSupportedVersion(test.getDescription().getVersion())) {
+                        WXLogger.prettyLog(Level.WARNING, false, "Found not supported version of PermissionsEx. Recommended is at least v1.18");
                     }
                     
                     try {

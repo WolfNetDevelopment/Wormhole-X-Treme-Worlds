@@ -1,6 +1,6 @@
 name: WormholeXTremeWorlds
 main: de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds
-version: 0.509
+version: 0.510
 authors: [alron, lycano]
 softdepend: [PermissionsEx, Help]
 description: >

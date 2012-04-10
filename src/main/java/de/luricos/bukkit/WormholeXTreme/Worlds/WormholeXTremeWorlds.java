@@ -25,13 +25,11 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.EventUtilities;
 import de.luricos.bukkit.WormholeXTreme.Worlds.handler.WorldHandler;
-import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.HelpSupport;
 import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
 import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
 import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction.ActionType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -80,8 +78,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         PluginSupport.enableSupportedPlugins();
 
         CommandUtilities.registerCommands(this);
-        HelpSupport.registerHelpCommands();
-        
+
         final int loaded = WorldManager.loadAutoloadWorlds();
         if (loaded > 0) {
             WXLogger.prettyLog(Level.INFO, false, "Auto-loaded " + loaded + (loaded > 1 ? " worlds." : " world."));
@@ -91,7 +88,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         if (ConfigManager.getServerOptionTimelock()) {
             setTimeScheduleId(scheduler.scheduleSyncRepeatingTask(this, new ScheduleAction(ActionType.TimeLock), 0, 200));
         } else {
-            WXLogger.prettyLog(Level.INFO, false, "Timelock scheduler disabled, per config.xml directive.");
+            WXLogger.prettyLog(Level.INFO, false, "Time-lock scheduler disabled, per config.xml directive.");
         }
         
         WXLogger.prettyLog(Level.INFO, true, "Startup finished");
@@ -109,7 +106,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         
         PluginSupport.disableSupportedPlugins();
         
-        WXLogger.prettyLog(Level.INFO, true, "Successfully shut down iteself and unlinked supported plugins.");
+        WXLogger.prettyLog(Level.INFO, true, "Successfully shut down itself and unlinked supported plugins.");
     }    
     
     /**

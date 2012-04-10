@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.luricos.bukkit</groupId>
-    <version>0.509</version>
+    <version>0.510</version>
     <artifactId>WormholeXTremeWorlds</artifactId>
     <packaging>jar</packaging>
     <name>WormholeXTremeWorlds</name>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.1-R3</version>
+            <version>1.2.5-R1.0</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -70,13 +70,6 @@
             <groupId>ru.tehkode</groupId>
             <artifactId>PermissionsEx</artifactId>
             <version>[1.8,)</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.taylorkelly.help</groupId>
-            <artifactId>Help</artifactId>
-            <version>[0.2,)</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

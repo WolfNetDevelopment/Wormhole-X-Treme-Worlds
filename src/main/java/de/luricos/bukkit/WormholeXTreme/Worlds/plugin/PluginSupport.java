@@ -22,8 +22,6 @@ package de.luricos.bukkit.WormholeXTreme.Worlds.plugin;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 
-import me.taylorkelly.help.Help;
-
 import ru.tehkode.permissions.PermissionManager;
 
 import java.util.HashMap;
@@ -35,8 +33,7 @@ import java.util.Map;
  */
 public class PluginSupport {
     public enum SupportedPlugin {
-        PERMISSIONS("PermissionsEx"),
-        HELP("Help");
+        PERMISSIONS("PermissionsEx");
 
         private final String name;
         private static final Map<String, SupportedPlugin> lookupMap = new HashMap<String, SupportedPlugin>();
@@ -60,19 +57,8 @@ public class PluginSupport {
         }
     }
     
-    /** The help. */
-    private static Help help = null;
     /** The permission handler. */
     private static PermissionManager permissionHandler = null;
-
-    /**
-     * Gets the help.
-     * 
-     * @return the help
-     */
-    protected static Help getHelp() {
-        return help;
-    }
 
     /**
      * Gets the permission handler.
@@ -83,16 +69,6 @@ public class PluginSupport {
         return permissionHandler;
     }
 
-    /**
-     * Sets the help.
-     * 
-     * @param help
-     *            the new help
-     */
-    public static void setHelp(final Help help) {
-        PluginSupport.help = help;
-    }
-    
     public static SupportedPlugin[] getSupportedPlugin() {
         return SupportedPlugin.values();
     }
@@ -120,8 +96,6 @@ public class PluginSupport {
     public static void disableSupport(String plugin) {
         if (plugin.equals(SupportedPlugin.PERMISSIONS.getName()) && ConfigManager.getServerOptionPermissions()) {
             PermissionsSupport.disablePermissions();
-        } else if (plugin.equals(SupportedPlugin.HELP.getName()) && ConfigManager.getServerOptionHelp()) {
-            HelpSupport.disableHelp();
         }
     }
 
@@ -138,10 +112,6 @@ public class PluginSupport {
     public static void enableSupport(String plugin) {
         if (plugin.equals(SupportedPlugin.PERMISSIONS.getName()) && ConfigManager.getServerOptionPermissions()) {
             PermissionsSupport.enablePermissions();
-            HelpSupport.registerHelpCommands();
-        } else if (plugin.equals(SupportedPlugin.HELP.getName()) && ConfigManager.getServerOptionHelp()) {
-            HelpSupport.enableHelp();
-            HelpSupport.registerHelpCommands();
-        }    
+        }
     }
 }
