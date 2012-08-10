@@ -225,68 +225,73 @@ public class XMLConfig {
      * @throws FactoryConfigurationError
      *             the factory configuration error
      */
-    private static void readConfigFile(final FileInputStream fileInputStream) throws XMLStreamException, FactoryConfigurationError {
-        final XMLEventReader eventReader = XMLInputFactory.newInstance().createXMLEventReader(fileInputStream);
-        XMLEvent event;
+    private static void readConfigFile(final FileInputStream fileInputStream, String fileName) {
+        XMLEventReader eventReader;
+        try {
+            eventReader = XMLInputFactory.newInstance().createXMLEventReader(fileInputStream);
+            XMLEvent event;
 
-        while (eventReader.hasNext()) {
-            ServerOptionKeys optionName = null;
-            String optionType = null;
-            Object optionValue = null;
-            String optionDescription = null;
-            boolean v = false;
-            boolean t = false;
-            int i = 0;
-            while ((i < 2) && eventReader.hasNext()) {
-                event = eventReader.nextEvent();
-                if (event.isStartElement()) {
-                    final String elementType = event.asStartElement().getName().toString();
-                    if (elementType.equals("type")) {
-                        t = true;
-                    } else if (elementType.equals("value")) {
-                        v = true;
-                    } else if (elementType.startsWith("serverOption")) {
-                        try {
-                            optionName = ServerOptionKeys.valueOf(elementType);
-                        } catch (final IllegalArgumentException e) {
-                            optionName = null;
+            while (eventReader.hasNext()) {
+                ServerOptionKeys optionName = null;
+                String optionType = null;
+                Object optionValue = null;
+                String optionDescription = null;
+                boolean v = false;
+                boolean t = false;
+                int i = 0;
+                while ((i < 2) && eventReader.hasNext()) {
+                    event = eventReader.nextEvent();
+                    if (event.isStartElement()) {
+                        final String elementType = event.asStartElement().getName().toString();
+                        if (elementType.equals("type")) {
+                            t = true;
+                        } else if (elementType.equals("value")) {
+                            v = true;
+                        } else if (elementType.startsWith("serverOption")) {
+                            try {
+                                optionName = ServerOptionKeys.valueOf(elementType);
+                            } catch (final IllegalArgumentException e) {
+                                optionName = null;
+                            }
                         }
-                    }
-                } else if (event.isCharacters() && t) {
-                    t = false;
-                    i++;
-                    optionType = event.asCharacters().getData();
-                } else if (event.isCharacters() && v) {
-                    v = false;
-                    i++;
-                    optionValue = event.asCharacters().getData();
-                }
-            }
-
-            if (optionName != null) {
-                final ServerOption[] defaultOptions = DefaultOptions.defaultServerOptions.clone();
-                for (final ServerOption defaultOption : defaultOptions) {
-                    if (defaultOption.getOptionKey() == optionName) {
-                        if ((optionType == null) || (!optionType.equals(defaultOption.getOptionType()))) {
-                            optionType = defaultOption.getOptionType();
-                        }
-                        if ((optionValue == null) || !verifyOptionValue(optionType, optionValue)) {
-                            optionValue = defaultOption.getOptionValue().toString();
-                        }
-                        optionDescription = defaultOption.getOptionDescription();
-                        break;
+                    } else if (event.isCharacters() && t) {
+                        t = false;
+                        i++;
+                        optionType = event.asCharacters().getData();
+                    } else if (event.isCharacters() && v) {
+                        v = false;
+                        i++;
+                        optionValue = event.asCharacters().getData();
                     }
                 }
 
-                WXLogger.prettyLog(Level.CONFIG, false, "Got from XML read: " + optionName + ", " + optionDescription + ", " + optionType + ", " + optionValue);
-                ConfigManager.serverOptions.put(optionName, new ServerOption(optionName, optionDescription, optionType, optionValue));
+                if (optionName != null) {
+                    final ServerOption[] defaultOptions = DefaultOptions.defaultServerOptions.clone();
+                    for (final ServerOption defaultOption : defaultOptions) {
+                        if (defaultOption.getOptionKey() == optionName) {
+                            if ((optionType == null) || (!optionType.equals(defaultOption.getOptionType()))) {
+                                optionType = defaultOption.getOptionType();
+                            }
+                            if ((optionValue == null) || !verifyOptionValue(optionType, optionValue)) {
+                                optionValue = defaultOption.getOptionValue().toString();
+                            }
+                            optionDescription = defaultOption.getOptionDescription();
+                            break;
+                        }
+                    }
+
+                    WXLogger.prettyLog(Level.CONFIG, false, "Got from XML read: " + optionName + ", " + optionDescription + ", " + optionType + ", " + optionValue);
+                    ConfigManager.serverOptions.put(optionName, new ServerOption(optionName, optionDescription, optionType, optionValue));
+                }
             }
-        }
-        for (final ServerOption defaultOption : DefaultOptions.defaultServerOptions) {
-            if (!ConfigManager.serverOptions.containsKey(defaultOption.getOptionKey())) {
-                ConfigManager.serverOptions.put(defaultOption.getOptionKey(), defaultOption);
-                WXLogger.prettyLog(Level.CONFIG, false, "Added default config for missing ServerOption: " + defaultOption.getOptionKey().toString());
+            for (final ServerOption defaultOption : DefaultOptions.defaultServerOptions) {
+                if (!ConfigManager.serverOptions.containsKey(defaultOption.getOptionKey())) {
+                    ConfigManager.serverOptions.put(defaultOption.getOptionKey(), defaultOption);
+                    WXLogger.prettyLog(Level.CONFIG, false, "Added default config for missing ServerOption: " + defaultOption.getOptionKey().toString());
+                }
             }
+        } catch (XMLStreamException e) {
+            WXLogger.prettyLog(Level.SEVERE, false, "Exception catched precessing xml: " + fileName + ", Message:" + e.getMessage());
         }
     }
 
@@ -300,114 +305,121 @@ public class XMLConfig {
      * @throws FactoryConfigurationError
      *             the factory configuration error
      */
-    private static void readWorldConfigFile(final FileInputStream fileInputStream) throws XMLStreamException, FactoryConfigurationError {
-        final XMLEventReader eventReader = XMLInputFactory.newInstance().createXMLEventReader(fileInputStream);
-        XMLEvent event;
-        final WormholeWorld wormholeWorld = new WormholeWorld();
-        while (eventReader.hasNext()) {
-            String optionName = null;
-            String optionType = null;
-            Object optionValue = null;
-            boolean v = false;
-            boolean t = false;
-            int i = 0;
-            while ((i < 2) && eventReader.hasNext()) {
-                event = eventReader.nextEvent();
-                if (event.isStartElement()) {
-                    final String elementType = event.asStartElement().getName().toString();
-                    if (elementType.equals("type")) {
-                        t = true;
-                    } else if (elementType.equals("value")) {
-                        v = true;
-                    } else {
-                        optionName = elementType;
+    private static void readWorldConfigFile(final FileInputStream fileInputStream, String fileName) throws XMLStreamException, FactoryConfigurationError {
+        try {
+            final XMLEventReader eventReader = XMLInputFactory.newInstance().createXMLEventReader(fileInputStream);
+            XMLEvent event;
+            final WormholeWorld wormholeWorld = new WormholeWorld();
+            while (eventReader.hasNext()) {
+                String optionName = null;
+                String optionType = null;
+                Object optionValue = null;
+                boolean v = false;
+                boolean t = false;
+                int i = 0;
+                while ((i < 2) && eventReader.hasNext()) {
+                    event = eventReader.nextEvent();
+                    if (event.isStartElement()) {
+                        final String elementType = event.asStartElement().getName().toString();
+                        if (elementType.equals("type")) {
+                            t = true;
+                        } else if (elementType.equals("value")) {
+                            v = true;
+                        } else {
+                            optionName = elementType;
+                        }
+                    } else if (event.isCharacters() && t) {
+                        t = false;
+                        i++;
+                        optionType = event.asCharacters().getData();
+                    } else if (event.isCharacters() && v) {
+                        v = false;
+                        i++;
+                        optionValue = event.asCharacters().getData();
                     }
-                } else if (event.isCharacters() && t) {
-                    t = false;
-                    i++;
-                    optionType = event.asCharacters().getData();
-                } else if (event.isCharacters() && v) {
-                    v = false;
-                    i++;
-                    optionValue = event.asCharacters().getData();
+                }
+                if ((optionName != null) && (optionValue != null)) {
+                    WXLogger.prettyLog(Level.CONFIG, false, "Got from World XML read: " + optionName + ", " + optionType + ", " + optionValue);
+                    if (optionName.equals("playerAllowContactDamage")) {
+                        wormholeWorld.setPlayerAllowContactDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPlayerDamage") || optionName.equals("playerAllowDamage")) {
+                        wormholeWorld.setPlayerAllowDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPlayerDrown") || optionName.equals("playerAllowDrown")) {
+                        wormholeWorld.setPlayerAllowDrown(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("playerAllowExplosionDamage")) {
+                        wormholeWorld.setPlayerAllowExplosionDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPlayerFallDamage") || optionName.equals("playerAllowFallDamage")) {
+                        wormholeWorld.setPlayerAllowFallDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPlayerFireDamage") || optionName.equals("playerAllowFireDamage")) {
+                        wormholeWorld.setPlayerAllowFireDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPlayerLavaDamage") || optionName.equals("playerAllowLavaDamage")) {
+                        wormholeWorld.setPlayerAllowLavaDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPlayerLightningDamage") || optionName.equals("playerAllowLightningDamage")) {
+                        wormholeWorld.setPlayerAllowLightningDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("playerAllowSuffocation")) {
+                        wormholeWorld.setPlayerAllowSuffocation(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("playerAllowVoidDamage")) {
+                        wormholeWorld.setPlayerAllowVoidDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("worldAllowFire")) {
+                        wormholeWorld.setWorldAllowFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowFireSpread") || optionName.equals("worldAllowFireSpread")) {
+                        wormholeWorld.setWorldAllowFireSpread(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowLavaFire") || optionName.equals("worldAllowLavaFire")) {
+                        wormholeWorld.setWorldAllowLavaFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowLavaSpread") || optionName.equals("worldAllowLavaSpread")) {
+                        wormholeWorld.setWorldAllowLavaSpread(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowLightningFire") || optionName.equals("worldAllowLightningFire")) {
+                        wormholeWorld.setWorldAllowLightningFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("worldAllowPlayerStartFire")) {
+                        wormholeWorld.setWorldAllowPlayerStartFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowPvP") || optionName.equals("worldAllowPvP")) {
+                        wormholeWorld.setWorldAllowPvP(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowHostiles") || optionName.equals("worldAllowSpawnHostiles")) {
+                        wormholeWorld.setWorldAllowSpawnHostiles(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowNeutrals") || optionName.equals("worldAllowSpawnNeutrals")) {
+                        wormholeWorld.setWorldAllowSpawnNeutrals(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("allowWaterSpread") || optionName.equals("worldAllowWaterSpread")) {
+                        wormholeWorld.setWorldAllowWaterSpread(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("autoconnectWorld") || optionName.equals("worldAutoload")) {
+                        wormholeWorld.setWorldAutoload(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("worldCustomSpawn")) {
+                        final int[] wcs = {
+                            Integer.valueOf(String.valueOf(optionValue).trim().split("\\|")[0]),
+                            Integer.valueOf(String.valueOf(optionValue).trim().split("\\|")[1]),
+                            Integer.valueOf(String.valueOf(optionValue).trim().split("\\|")[2])
+                        };
+                        wormholeWorld.setWorldCustomSpawn(wcs);
+                    } else if (optionName.equals("worldName")) {
+                        wormholeWorld.setWorldName(String.valueOf(optionValue).trim());
+                    } else if (optionName.equals("worldSeed")) {
+                        try {
+                            wormholeWorld.setWorldSeed(Long.valueOf(optionValue.toString().trim()));
+                        } catch (final NumberFormatException e) {
+                            wormholeWorld.setWorldSeed((long) optionValue.toString().trim().hashCode());
+                        }
+                    } else if (optionName.equals("timeLockType") || optionName.equals("worldTimeLockType")) {
+                        wormholeWorld.setWorldTimeLockType(TimeLockType.getTimeType(String.valueOf(optionValue).trim().toUpperCase()));
+                    } else if (optionName.equals("normalWorld") || optionName.equals("worldTypeNormal")) {
+                        wormholeWorld.setWorldTypeNormal(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("netherWorld") || optionName.equals("worldTypeNether")) {
+                        wormholeWorld.setWorldTypeNether(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("theEndWorld") || optionName.equals("worldTypeTheEnd")) {
+                        wormholeWorld.setWorldTypeTheEnd(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
+                    } else if (optionName.equals("weatherLockType") || optionName.equals("worldWeatherLockType")) {
+                        wormholeWorld.setWorldWeatherLockType(WeatherLockType.getWeatherType(String.valueOf(optionValue).trim().toUpperCase()));
+                    }
                 }
             }
-            if ((optionName != null) && (optionValue != null)) {
-                WXLogger.prettyLog(Level.CONFIG, false, "Got from World XML read: " + optionName + ", " + optionType + ", " + optionValue);
-                if (optionName.equals("playerAllowContactDamage")) {
-                    wormholeWorld.setPlayerAllowContactDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPlayerDamage") || optionName.equals("playerAllowDamage")) {
-                    wormholeWorld.setPlayerAllowDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPlayerDrown") || optionName.equals("playerAllowDrown")) {
-                    wormholeWorld.setPlayerAllowDrown(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("playerAllowExplosionDamage")) {
-                    wormholeWorld.setPlayerAllowExplosionDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPlayerFallDamage") || optionName.equals("playerAllowFallDamage")) {
-                    wormholeWorld.setPlayerAllowFallDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPlayerFireDamage") || optionName.equals("playerAllowFireDamage")) {
-                    wormholeWorld.setPlayerAllowFireDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPlayerLavaDamage") || optionName.equals("playerAllowLavaDamage")) {
-                    wormholeWorld.setPlayerAllowLavaDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPlayerLightningDamage") || optionName.equals("playerAllowLightningDamage")) {
-                    wormholeWorld.setPlayerAllowLightningDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("playerAllowSuffocation")) {
-                    wormholeWorld.setPlayerAllowSuffocation(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("playerAllowVoidDamage")) {
-                    wormholeWorld.setPlayerAllowVoidDamage(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("worldAllowFire")) {
-                    wormholeWorld.setWorldAllowFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowFireSpread") || optionName.equals("worldAllowFireSpread")) {
-                    wormholeWorld.setWorldAllowFireSpread(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowLavaFire") || optionName.equals("worldAllowLavaFire")) {
-                    wormholeWorld.setWorldAllowLavaFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowLavaSpread") || optionName.equals("worldAllowLavaSpread")) {
-                    wormholeWorld.setWorldAllowLavaSpread(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowLightningFire") || optionName.equals("worldAllowLightningFire")) {
-                    wormholeWorld.setWorldAllowLightningFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("worldAllowPlayerStartFire")) {
-                    wormholeWorld.setWorldAllowPlayerStartFire(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowPvP") || optionName.equals("worldAllowPvP")) {
-                    wormholeWorld.setWorldAllowPvP(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowHostiles") || optionName.equals("worldAllowSpawnHostiles")) {
-                    wormholeWorld.setWorldAllowSpawnHostiles(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowNeutrals") || optionName.equals("worldAllowSpawnNeutrals")) {
-                    wormholeWorld.setWorldAllowSpawnNeutrals(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("allowWaterSpread") || optionName.equals("worldAllowWaterSpread")) {
-                    wormholeWorld.setWorldAllowWaterSpread(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("autoconnectWorld") || optionName.equals("worldAutoload")) {
-                    wormholeWorld.setWorldAutoload(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("worldCustomSpawn")) {
-                    final int[] wcs = {
-                        Integer.valueOf(String.valueOf(optionValue).trim().split("\\|")[0]),
-                        Integer.valueOf(String.valueOf(optionValue).trim().split("\\|")[1]),
-                        Integer.valueOf(String.valueOf(optionValue).trim().split("\\|")[2])
-                    };
-                    wormholeWorld.setWorldCustomSpawn(wcs);
-                } else if (optionName.equals("worldName")) {
-                    wormholeWorld.setWorldName(String.valueOf(optionValue).trim());
-                } else if (optionName.equals("worldSeed")) {
-                    try {
-                        wormholeWorld.setWorldSeed(Long.valueOf(optionValue.toString().trim()));
-                    } catch (final NumberFormatException e) {
-                        wormholeWorld.setWorldSeed(Long.valueOf(optionValue.toString().trim().hashCode()));
-                    }
-                } else if (optionName.equals("timeLockType") || optionName.equals("worldTimeLockType")) {
-                    wormholeWorld.setWorldTimeLockType(TimeLockType.getTimeType(String.valueOf(optionValue).trim().toUpperCase()));
-                } else if (optionName.equals("normalWorld") || optionName.equals("worldTypeNormal")) {
-                    wormholeWorld.setWorldTypeNormal(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("netherWorld") || optionName.equals("worldTypeNether")) {
-                    wormholeWorld.setWorldTypeNether(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("theEndWorld") || optionName.equals("worldTypeTheEnd")) {
-                    wormholeWorld.setWorldTypeTheEnd(Boolean.valueOf(optionValue.toString().trim().toLowerCase()));
-                } else if (optionName.equals("weatherLockType") || optionName.equals("worldWeatherLockType")) {
-                    wormholeWorld.setWorldWeatherLockType(WeatherLockType.getWeatherType(String.valueOf(optionValue).trim().toUpperCase()));
-                }
+
+            if ((wormholeWorld.getWorldName() != null) && (wormholeWorld.getWorldCustomSpawn() != null)) {
+                WorldManager.addWorld(wormholeWorld);
             }
+        } catch (XMLStreamException e) {
+            WXLogger.prettyLog(Level.SEVERE, false, "Error caught processing worldXML: " + fileName + ", Message: " + e.getMessage());
+        } catch (FactoryConfigurationError e) {
+            e.printStackTrace();
         }
-        
-        if ((wormholeWorld.getWorldName() != null) && (wormholeWorld.getWorldCustomSpawn() != null)) {
-            WorldManager.addWorld(wormholeWorld);
-        }
+
     }
 
     /**
@@ -424,11 +436,12 @@ public class XMLConfig {
         if (!prepareConfig(desc)) {
             return;
         }
+
         if (getConfigFile().exists()) {
             FileInputStream fileInputStream = null;
             try {
                 fileInputStream = new FileInputStream(getConfigFile());
-                readConfigFile(fileInputStream);
+                readConfigFile(fileInputStream, getConfigFile().getName());
                 WXLogger.prettyLog(Level.INFO, false, "Config Loaded");
             } finally {
                 try {
@@ -436,6 +449,7 @@ public class XMLConfig {
                         fileInputStream.close();
                     }
                 } catch (final IOException e) {
+                    WXLogger.prettyLog(Level.WARNING, false, "IOException caught during closing file '" + getConfigFile().getName() + "'");
                 }
             }
         }
@@ -445,7 +459,7 @@ public class XMLConfig {
                     FileInputStream fileInputStream = null;
                     try {
                         fileInputStream = new FileInputStream(worldFile);
-                        readWorldConfigFile(fileInputStream);
+                        readWorldConfigFile(fileInputStream, worldFile.getName());
                         WXLogger.prettyLog(Level.INFO, false, "World Config Loaded: " + worldFile.getName());
                     } finally {
                         try {
@@ -453,6 +467,7 @@ public class XMLConfig {
                                 fileInputStream.close();
                             }
                         } catch (final IOException e) {
+                            WXLogger.prettyLog(Level.WARNING, false, "IOException caught during closing file '" + worldFile.getName() + "'");
                         }
                     }
                 }

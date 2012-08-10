@@ -50,23 +50,6 @@ public class PermissionsSupport {
             }
         }
     }
-
-    public static boolean isSupportedVersion(String verIn) {
-        String comp1 = verIn.replaceAll("\\.", "");
-        int subVCount = verIn.length() - comp1.length();
-        Double minVer = 1.18;
-
-        if ((subVCount < 2) && (Double.parseDouble(verIn) >= minVer))
-            return true;
-
-        if ((subVCount < 2) && (Double.parseDouble(verIn) < minVer))
-            return false;
-
-        int firstMatch = verIn.indexOf(".");
-        String verOut = verIn.substring(0, firstMatch) + "." + comp1.substring(firstMatch);
-        
-        return Double.parseDouble(verOut) >= minVer;
-    }
     
     /**
      * Enable permissions.
@@ -95,5 +78,25 @@ public class PermissionsSupport {
         } else {
             WXLogger.prettyLog(Level.INFO, false, "Permissions Plugin support disabled via config.xml");
         }
+    }
+
+    public static boolean isSupportedVersion(String verIn) {
+        return isSupportedVersion(verIn, 1.18);
+    }
+
+    public static boolean isSupportedVersion(String verIn, Double checkVer) {
+        String comp1 = verIn.replaceAll("\\.", "");
+        int subVCount = verIn.length() - comp1.length();
+
+        if ((subVCount < 2) && (Double.parseDouble(verIn) >= checkVer))
+            return true;
+
+        if ((subVCount < 2) && (Double.parseDouble(verIn) < checkVer))
+            return false;
+
+        int firstMatch = verIn.indexOf(".");
+        String verOut = verIn.substring(0, firstMatch) + "." + comp1.substring(firstMatch);
+
+        return Double.parseDouble(verOut) >= checkVer;
     }
 }
