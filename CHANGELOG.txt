@@ -1,3 +1,8 @@
+v0.515
+  - CB 1.2.5-R5.0 compatible build
+  - XML Errors now show the files name
+
+
 v0.510
   - CB 1.2.5-R1.0 compatible build
   - removed Help Support as its outdated. Will be added later with an updated version.
