@@ -20,8 +20,8 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.world;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 
 /**
  * The Class World.

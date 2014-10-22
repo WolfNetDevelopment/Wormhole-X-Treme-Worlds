@@ -20,10 +20,10 @@ package de.luricos.bukkit.WormholeXTreme.Worlds.world;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsAutoloadException;
-import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsDuplicateUUIDException;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
+import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsDuplicateUUIDException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;

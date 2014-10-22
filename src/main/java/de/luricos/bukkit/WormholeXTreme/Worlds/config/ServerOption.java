@@ -20,8 +20,6 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.config;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOptionKeys;
-
 /**
  * The Class Option.
  * 
@@ -30,7 +28,7 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOption
 public class ServerOption {
 
     /** The option key. */
-    private ServerOptionKeys optionKey;
+    private ConfigManager.ServerOptionKeys optionKey;
     /** The option description. */
     private String optionDescription;
     /** The option type. */
@@ -50,7 +48,7 @@ public class ServerOption {
      * @param optionValue
      *            the option value
      */
-    protected ServerOption(final ServerOptionKeys optionKey, final String optionDescription, final String optionType, final Object optionValue) {
+    protected ServerOption(final ConfigManager.ServerOptionKeys optionKey, final String optionDescription, final String optionType, final Object optionValue) {
         if ((optionKey != null) && (optionDescription != null) && (optionValue != null)) {
             setOptionKey(optionKey);
             setOptionDescription(optionDescription);
@@ -73,7 +71,7 @@ public class ServerOption {
      * 
      * @return the option key
      */
-    public ServerOptionKeys getOptionKey() {
+    public ConfigManager.ServerOptionKeys getOptionKey() {
         return optionKey;
     }
 
@@ -111,7 +109,7 @@ public class ServerOption {
      * @param optionKey
      *            the new option key
      */
-    private void setOptionKey(final ServerOptionKeys optionKey) {
+    private void setOptionKey(final ConfigManager.ServerOptionKeys optionKey) {
         this.optionKey = optionKey;
     }
 

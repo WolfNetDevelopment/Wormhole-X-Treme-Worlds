@@ -20,11 +20,11 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.block;
 
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 
 /**
  * The Class BlockIgnite.

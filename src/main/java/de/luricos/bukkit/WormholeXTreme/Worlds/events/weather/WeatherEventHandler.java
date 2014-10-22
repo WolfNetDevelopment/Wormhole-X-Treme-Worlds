@@ -27,7 +27,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.weather.WeatherListener;
 
 import java.util.logging.Level;
 

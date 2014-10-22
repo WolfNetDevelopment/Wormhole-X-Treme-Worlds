@@ -20,10 +20,10 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.world;
 
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 import org.bukkit.Chunk;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 
 /**
  * The Class ChunkUnload.

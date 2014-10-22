@@ -20,7 +20,6 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.config;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOptionKeys;
 import de.luricos.bukkit.WormholeXTreme.Worlds.exceptions.WorldsConfigurationException;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
@@ -232,7 +231,7 @@ public class XMLConfig {
             XMLEvent event;
 
             while (eventReader.hasNext()) {
-                ServerOptionKeys optionName = null;
+                ConfigManager.ServerOptionKeys optionName = null;
                 String optionType = null;
                 Object optionValue = null;
                 String optionDescription = null;
@@ -249,7 +248,7 @@ public class XMLConfig {
                             v = true;
                         } else if (elementType.startsWith("serverOption")) {
                             try {
-                                optionName = ServerOptionKeys.valueOf(elementType);
+                                optionName = ConfigManager.ServerOptionKeys.valueOf(elementType);
                             } catch (final IllegalArgumentException e) {
                                 optionName = null;
                             }
@@ -609,12 +608,12 @@ public class XMLConfig {
         }
 
         if (getConfigDirectory().exists()) {
-            final Set<ServerOptionKeys> keys = ConfigManager.serverOptions.keySet();
-            final ArrayList<ServerOptionKeys> list = new ArrayList<ServerOptionKeys>(keys);
+            final Set<ConfigManager.ServerOptionKeys> keys = ConfigManager.serverOptions.keySet();
+            final ArrayList<ConfigManager.ServerOptionKeys> list = new ArrayList<ConfigManager.ServerOptionKeys>(keys);
             Collections.sort(list);
             final ServerOption[] optionArray = new ServerOption[list.size()];
             int i = 0;
-            for (final ServerOptionKeys key : list) {
+            for (final ConfigManager.ServerOptionKeys key : list) {
                 final ServerOption o = ConfigManager.serverOptions.get(key);
                 if ((o != null) && (o.getOptionKey() != null) && (o.getOptionDescription() != null) && (o.getOptionType() != null) && (o.getOptionValue() != null)) {
                     optionArray[i] = new ServerOption(o.getOptionKey(), o.getOptionDescription(), o.getOptionType(), o.getOptionValue());

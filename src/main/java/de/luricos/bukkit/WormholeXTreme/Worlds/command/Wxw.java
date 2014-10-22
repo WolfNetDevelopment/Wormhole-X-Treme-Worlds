@@ -25,7 +25,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
-import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction.ActionType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WeatherLockType;
@@ -660,10 +659,10 @@ public class Wxw implements CommandExecutor {
                             }
                             if (world.isWorldLoaded()) {
                                 if (doHostiles || doNeutrals) {
-                                    WormholeXTremeWorlds.getScheduler().scheduleSyncDelayedTask(thisPlugin, new ScheduleAction(world, ActionType.ClearEntities));
+                                    WormholeXTremeWorlds.getScheduler().scheduleSyncDelayedTask(thisPlugin, new ScheduleAction(world, ScheduleAction.ActionType.ClearEntities));
                                 }
                                 if (weatherLockType != null) {
-                                    WormholeXTremeWorlds.getScheduler().scheduleSyncDelayedTask(thisPlugin, new ScheduleAction(world, ActionType.SetWeather));
+                                    WormholeXTremeWorlds.getScheduler().scheduleSyncDelayedTask(thisPlugin, new ScheduleAction(world, ScheduleAction.ActionType.SetWeather));
                                 }
                                 if (doPvP) {
                                     WorldManager.setWorldPvP(world);

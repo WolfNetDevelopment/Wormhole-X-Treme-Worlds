@@ -20,8 +20,6 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.config;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager.ServerOptionKeys;
-
 /**
  * @author alron
  * 
@@ -30,10 +28,10 @@ public class DefaultOptions {
 
     /** The Constant defaultOptions. */
     final static ServerOption[] defaultServerOptions = {
-        new ServerOption(ServerOptionKeys.serverOptionPermissions, "Option: Enable or disable Permissions plugin support. Default: true (enable)", "boolean", true),
-        new ServerOption(ServerOptionKeys.serverOptionOpsBypassPermissions, "Option: Ops bypass Permissions plugin access checks. Default: true (enabled)", "boolean", true),
-        new ServerOption(ServerOptionKeys.serverOptionHelp, "Option: Enable or disable Help plugin support. Default: true (enabled)", "boolean", true),
-        new ServerOption(ServerOptionKeys.serverOptionTimelock, "Option: Enable or disable timelock functionality. Default: true (enabled)", "boolean", true), //new ServerOption(ServerOptionKeys.serverOptionIconomy, "Option: Enable or disable iConomy plugin support. Default: true", "boolean", true, "WormholeXTremeWorlds"),
+        new ServerOption(ConfigManager.ServerOptionKeys.serverOptionPermissions, "Option: Enable or disable Permissions plugin support. Default: true (enable)", "boolean", true),
+        new ServerOption(ConfigManager.ServerOptionKeys.serverOptionOpsBypassPermissions, "Option: Ops bypass Permissions plugin access checks. Default: true (enabled)", "boolean", true),
+        new ServerOption(ConfigManager.ServerOptionKeys.serverOptionHelp, "Option: Enable or disable Help plugin support. Default: true (enabled)", "boolean", true),
+        new ServerOption(ConfigManager.ServerOptionKeys.serverOptionTimelock, "Option: Enable or disable timelock functionality. Default: true (enabled)", "boolean", true), //new ServerOption(ServerOptionKeys.serverOptionIconomy, "Option: Enable or disable iConomy plugin support. Default: true", "boolean", true, "WormholeXTremeWorlds"),
     //new ServerOption(ServerOptionKeys.serverOptionOpsBypassIconomy, "Option: Ops bypass iConomy plugin charges. Default: true", "boolean", true, "WormholeXTremeWorlds"),
     //new ServerOption(ServerOptionKeys.serverOptionIconomyCostForNormalWorldGeneration, "Option: iConomy cost to generate a normal world. Default: 1000.0", "double", 1000.0, "WormholeXTremeWorlds"),
     //new ServerOption(ServerOptionKeys.serverOptionIconomyCostForNetherWorldGeneration, "Option: iConomy cost to generate a nether world. Default: 2000.0", "double", 2000.0, "WormholeXTremeWorlds"),

@@ -20,13 +20,13 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds.events.entity;
 
+import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
-import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
 
 /**
  * The Class EntityDamage.

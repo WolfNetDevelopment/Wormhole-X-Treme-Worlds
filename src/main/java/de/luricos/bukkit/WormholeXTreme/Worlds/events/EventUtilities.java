@@ -21,8 +21,8 @@
 package de.luricos.bukkit.WormholeXTreme.Worlds.events;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
-import de.luricos.bukkit.WormholeXTreme.Worlds.block.BlockEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.entity.EntityEventHandler;
+import de.luricos.bukkit.WormholeXTreme.Worlds.block.BlockEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.weather.WeatherEventHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.world.WorldEventHandler;
 import org.bukkit.plugin.PluginManager;

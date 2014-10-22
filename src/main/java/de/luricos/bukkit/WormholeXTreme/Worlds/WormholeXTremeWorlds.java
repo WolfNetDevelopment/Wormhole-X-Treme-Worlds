@@ -20,14 +20,13 @@
  */
 package de.luricos.bukkit.WormholeXTreme.Worlds;
 
+import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
 import de.luricos.bukkit.WormholeXTreme.Worlds.command.CommandUtilities;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.EventUtilities;
 import de.luricos.bukkit.WormholeXTreme.Worlds.handler.WorldHandler;
 import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
-import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
-import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction.ActionType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 import org.bukkit.Bukkit;
@@ -86,7 +85,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         setWorldHandler(new WorldHandler());        
         
         if (ConfigManager.getServerOptionTimelock()) {
-            setTimeScheduleId(scheduler.scheduleSyncRepeatingTask(this, new ScheduleAction(ActionType.TimeLock), 0, 200));
+            setTimeScheduleId(scheduler.scheduleSyncRepeatingTask(this, new ScheduleAction(ScheduleAction.ActionType.TimeLock), 0, 200));
         } else {
             WXLogger.prettyLog(Level.INFO, false, "Time-lock scheduler disabled, per config.xml directive.");
         }
