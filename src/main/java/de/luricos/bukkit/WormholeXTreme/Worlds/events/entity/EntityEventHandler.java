@@ -46,7 +46,7 @@ public class EntityEventHandler implements Listener {
     public void onCreatureSpawn(final CreatureSpawnEvent event) {
         if (!event.isCancelled() && (event.getEntity() != null) && CreatureSpawn.handleCreatureSpawn(event.getEntity())) {
             event.setCancelled(true);
-            WXLogger.prettyLog(Level.FINEST, false, "Denied creature spawn on world: " + event.getLocation().getWorld().getName() + " creature type: " + event.getCreatureType().toString());
+            WXLogger.prettyLog(Level.FINEST, false, "Denied creature spawn on world: " + event.getLocation().getWorld().getName() + " entity type: " + event.getEntityType().toString());
         }
     }
 

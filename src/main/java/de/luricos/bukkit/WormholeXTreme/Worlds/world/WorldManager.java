@@ -77,15 +77,15 @@ public class WorldManager {
     /**
      * Check non safe type id.
      * 
-     * @param typeId
+     * @param material
      *            the type id
      * @return true, if successful
      */
-    private static boolean checkNonSafeTypeId(final int typeId) {
-        if ((typeId == 0) || (typeId == 10) || (typeId == 11)) {
+    private static boolean checkNonSafeMaterial(final Material material) {
+        if ((material == Material.AIR) || (material == Material.LAVA)){
             return false;
         }
-        WXLogger.prettyLog(Level.FINE, false, "Did not find blockId to be unsafe material:" + typeId);
+        WXLogger.prettyLog(Level.FINE, false, "Did not find material to be unsafe:" + material);
         return true;
     }
 
@@ -128,8 +128,8 @@ public class WorldManager {
      */
     private static boolean checkSafeBlockBelow(final Block safeBlock) {
         if (safeBlock != null) {
-            final int typeId = safeBlock.getRelative(BlockFace.DOWN).getTypeId();
-            return checkNonSafeTypeId(typeId);
+//            final int typeId = safeBlock.getRelative(BlockFace.DOWN).getTypeId();
+            return checkNonSafeMaterial(safeBlock.getType());
         }
         return false;
     }
@@ -160,7 +160,7 @@ public class WorldManager {
      */
     private static boolean checkSafeMaterial(Material material) {
         //AIR,WATER,STATIONARY_WATER,RAILS
-        return (material.equals(Material.AIR)) || (material.equals(Material.WATER)) || (material.equals(Material.STATIONARY_WATER)) || (material.equals(Material.RAILS));
+        return (material.equals(Material.AIR)) || (material.equals(Material.WATER)) || (material.equals(Material.RAIL));
     }
 
     /**

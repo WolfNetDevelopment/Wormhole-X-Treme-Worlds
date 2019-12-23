@@ -21,7 +21,7 @@
 package de.luricos.bukkit.WormholeXTreme.Worlds.handler;
 
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
-import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.CheckPerms;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WormholeWorld;
@@ -163,7 +163,7 @@ public class WorldHandler {
      */
     public boolean spawnPlayer(final Player player, final String worldName, final boolean permissionCheck) { // NO_UCD
         if (player != null) {
-            if (permissionCheck && !PermissionType.SPAWN.checkPermission(player)) {
+            if (permissionCheck && !CheckPerms.hasPermission(player, "wxw.spawn")) {
                 player.sendMessage(ResponseType.ERROR_PERMISSION_NO.toString());
             } else {
                 final WormholeWorld wormholeWorld = worldName != null ? WorldManager.getWormholeWorld(worldName)
