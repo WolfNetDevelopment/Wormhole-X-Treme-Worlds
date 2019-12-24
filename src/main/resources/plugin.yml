@@ -1,22 +1,16 @@
 name: WormholeXTremeWorlds
 main: de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds
-version: 0.6
+version: 0.6.1
 authors: [alron, lycano, henry0w]
 softdepend: [Help]
+api-version: 1.13
 description: >
              Wormhole X-Treme Worlds! World management for Wormhole X-Treme! Now Remade by Henryow/Tigermonkeyshark.
              
 commands:
   wxw:
+    usage: wxw [go [world]\| list \| remove [world] \| load [world] \| modify [args] \| info [world] \| setspawn \| create [args] \| spawn ]
     description: Manage Worlds via Wormhole X-Treme Worlds
-    usage: |
-            Travel Commands:
-            /<command> [go <world> | spawn]
-            Info Commands:
-            /<command> [list | info <world>]
-            Admin Commands:
-            /<command> [create | remove | modify | setspawn | load] <args>
-            All commands requiring arguments can be called without args for command specific help.
 Permissions:
   wxw.setunlocked:
     description: Be able to change if a players inventory is vanilla or metro

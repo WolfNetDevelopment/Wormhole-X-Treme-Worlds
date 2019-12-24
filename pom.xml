@@ -3,6 +3,13 @@
     <groupId>de.luricos.bukkit</groupId>
     <version>0.6</version>
     <artifactId>WormholeXTremeWorlds</artifactId>
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Internal repo</name>
+            <url></url>
+        </repository>
+    </distributionManagement>
     <repositories>
         <repository>
             <id>spigotmc-repo</id>
