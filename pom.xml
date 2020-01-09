@@ -3,13 +3,6 @@
     <groupId>de.luricos.bukkit</groupId>
     <version>0.6</version>
     <artifactId>WormholeXTremeWorlds</artifactId>
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Internal repo</name>
-            <url></url>
-        </repository>
-    </distributionManagement>
     <repositories>
         <repository>
             <id>spigotmc-repo</id>
@@ -28,5 +21,8 @@
     <properties>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
+        <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+        <github.global.server>github</github.global.server>
     </properties>
+
 </project>

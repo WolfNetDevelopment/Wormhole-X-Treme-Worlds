@@ -38,8 +38,6 @@ public class ConfigManager {
         serverOptionHelp,
         /** The server option ops bypass permissions. */
         serverOptionOpsBypassPermissions,
-        /** The server option permissions. */
-        serverOptionPermissions,
         /** The server option timelock. */
         serverOptionTimelock
     }
@@ -90,6 +88,7 @@ public class ConfigManager {
      * 
      * @return the server option permissions
      */
+/*
     public static boolean getServerOptionPermissions() {
         final ServerOption o = getServerOption(ServerOptionKeys.serverOptionPermissions);
         if (o != null) {
@@ -98,6 +97,7 @@ public class ConfigManager {
             return true;
         }
     }
+*/
 
     /**
      * Gets the server option timelock.
@@ -154,9 +154,9 @@ public class ConfigManager {
      * @param b
      *            the new server option permissions
      */
-    public static void setServerOptionPermissions(final boolean b) { // NO_UCD
+    /*public static void setServerOptionPermissions(final boolean b) { // NO_UCD
         ConfigManager.setOptionValue(ServerOptionKeys.serverOptionPermissions, b);
-    }
+    }*/
 
     /**
      * Sets the server option timelock.

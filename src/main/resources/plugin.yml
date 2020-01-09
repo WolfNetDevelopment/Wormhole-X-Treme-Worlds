@@ -5,7 +5,7 @@ authors: [alron, lycano, henry0w]
 softdepend: [Help]
 api-version: 1.13
 description: >
-             Wormhole X-Treme Worlds! World management for Wormhole X-Treme! Now Remade by Henryow/Tigermonkeyshark.
+             Wormhole X-Treme Worlds! World management for Wormhole X-Treme!
              
 commands:
   wxw:
