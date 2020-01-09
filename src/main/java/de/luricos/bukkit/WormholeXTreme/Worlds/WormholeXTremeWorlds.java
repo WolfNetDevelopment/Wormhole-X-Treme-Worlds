@@ -26,7 +26,6 @@ import de.luricos.bukkit.WormholeXTreme.Worlds.config.ConfigManager;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
 import de.luricos.bukkit.WormholeXTreme.Worlds.events.EventUtilities;
 import de.luricos.bukkit.WormholeXTreme.Worlds.handler.WorldHandler;
-import de.luricos.bukkit.WormholeXTreme.Worlds.plugin.PluginSupport;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.WorldManager;
 import org.bukkit.Bukkit;
@@ -74,7 +73,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         WXLogger.prettyLog(Level.INFO, true, "Enabling plugin ...");
         EventUtilities.registerEvents();
         
-        PluginSupport.enableSupportedPlugins();
+//        PluginSupport.enableSupportedPlugins();
 
         CommandUtilities.registerCommands(this);
 
@@ -103,7 +102,7 @@ public class WormholeXTremeWorlds extends JavaPlugin {
         }
         XMLConfig.saveXmlConfig(this.getDescription());
         
-        PluginSupport.disableSupportedPlugins();
+//        PluginSupport.disableSupportedPlugins();
         
         WXLogger.prettyLog(Level.INFO, true, "Successfully shut down itself and unlinked supported plugins.");
     }    

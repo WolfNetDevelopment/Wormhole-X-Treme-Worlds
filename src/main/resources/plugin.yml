@@ -1,19 +1,53 @@
 name: WormholeXTremeWorlds
 main: de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds
-version: 0.6
-authors: [alron, lycano]
-softdepend: [PermissionsEx, Help]
+version: 0.6.1
+authors: [alron, lycano, henry0w]
+softdepend: [Help]
+api-version: 1.13
 description: >
              Wormhole X-Treme Worlds! World management for Wormhole X-Treme!
              
 commands:
   wxw:
+    usage: wxw [go [world]\| list \| remove [world] \| load [world] \| modify [args] \| info [world] \| setspawn \| create [args] \| spawn ]
     description: Manage Worlds via Wormhole X-Treme Worlds
-    usage: |
-            Travel Commands:
-            /<command> [go <world> | spawn]
-            Info Commands:
-            /<command> [list | info <world>]
-            Admin Commands:
-            /<command> [create | remove | modify | setspawn | load] <args>
-            All commands requiring arguments can be called without args for command specific help.
+Permissions:
+  wxw.setunlocked:
+    description: Be able to change if a players inventory is vanilla or metro
+    default: false
+
+  wxw.admin.go:
+    description: access to /wxw go  --  Change to specified world
+    default: false
+
+  wxw.admin.list:
+    description: access to '/wxw list' - List all loaded and configured worlds
+    default: false
+
+  wxw.admin.remove:
+    description: access to '/wxw remove [world]' - Remove world from configuration
+    default: false
+
+  wxw.admin.load:
+    description: access to '/wxw load [world]' - Load unloaded world
+    default: false
+
+  wxw.admin.modify:
+    description: access to '/wxw modify [args]' - Modify settings of specified world
+    default: false
+
+  wxw.admin.info:
+    description: access to '/wxw info [world]' - Get info about specified world
+    default: false
+
+  wxw.admin.setspawn:
+    description: access to '/wxw setspawn' - Set spawn of current world to current location
+    default: false
+
+  wxw.admin.create:
+    description: access to '/wxw create [args]' - Create new world with specified args
+    default: false
+
+  wxw.spawn:
+    description: access to '/wxw spawn' - Go to spawn of current world
+    default: false

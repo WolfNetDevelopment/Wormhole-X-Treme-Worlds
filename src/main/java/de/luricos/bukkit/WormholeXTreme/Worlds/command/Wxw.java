@@ -23,7 +23,7 @@ package de.luricos.bukkit.WormholeXTreme.Worlds.command;
 import de.luricos.bukkit.WormholeXTreme.Worlds.WormholeXTremeWorlds;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.ResponseType;
 import de.luricos.bukkit.WormholeXTreme.Worlds.config.XMLConfig;
-import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.PermissionType;
+import de.luricos.bukkit.WormholeXTreme.Worlds.permissions.CheckPerms;
 import de.luricos.bukkit.WormholeXTreme.Worlds.scheduler.ScheduleAction;
 import de.luricos.bukkit.WormholeXTreme.Worlds.utils.WXLogger;
 import de.luricos.bukkit.WormholeXTreme.Worlds.world.TimeLockType;
@@ -74,7 +74,7 @@ public class Wxw implements CommandExecutor {
      * @return true, if successful
      */
     private static boolean doCreateWorld(final CommandSender sender, final String[] args) {
-        if (!CommandUtilities.playerCheck(sender) || PermissionType.CREATE.checkPermission((Player) sender)) {
+        if (!CommandUtilities.playerCheck(sender) || CheckPerms.hasPermission((Player) sender, "wxw.admin.create")) {
             if ((args != null) && (args.length >= 1)) {
                 if (args[0].startsWith("-")) {
                     final WormholeWorld wormholeWorld = new WormholeWorld();
@@ -297,7 +297,7 @@ public class Wxw implements CommandExecutor {
      * @return true, if successful
      */
     private static boolean doGoWorld(final Player player, final String[] args) {
-        if (PermissionType.GO.checkPermission(player)) {
+        if (CheckPerms.hasPermission(player, "wxw.admin.go")) {
             if ((args != null) && (args.length == 1)) {
                 final WormholeWorld wormholeWorld = WorldManager.getWormholeWorld(args[0]);
                 if ((wormholeWorld != null) && (wormholeWorld.isWorldLoaded())) {
@@ -328,7 +328,7 @@ public class Wxw implements CommandExecutor {
         if (sender instanceof ConsoleCommandSender)
             return true;
 
-        boolean allowed = !CommandUtilities.playerCheck(sender) || PermissionType.INFO.checkPermission((Player) sender);
+        boolean allowed = !CommandUtilities.playerCheck(sender) || CheckPerms.hasPermission((Player) sender, "wxw.admin.info");
 
         if (allowed) {
             WormholeWorld world = (args[0].equals("")) ? WorldManager.getWorldFromPlayer((Player) sender) : WorldManager.getWormholeWorld(args[0]);
@@ -361,7 +361,7 @@ public class Wxw implements CommandExecutor {
      */
     private static boolean doListWorlds(final CommandSender sender) {
         boolean allowed = false;
-        allowed = !CommandUtilities.playerCheck(sender) || PermissionType.LIST.checkPermission((Player) sender);
+        allowed = !CommandUtilities.playerCheck(sender) || CheckPerms.hasPermission((Player) sender, "wxw.admin.list");
 
         if (allowed) {
             final List<World> worldLoadedList = WormholeXTremeWorlds.getThisPlugin().getServer().getWorlds();
@@ -411,7 +411,7 @@ public class Wxw implements CommandExecutor {
      */
     private static boolean doLoadWorld(final CommandSender sender, final String[] args, final String commandName) {
         boolean allowed = false;
-        allowed = !CommandUtilities.playerCheck(sender) || PermissionType.LOAD.checkPermission((Player) sender);
+        allowed = !CommandUtilities.playerCheck(sender) || CheckPerms.hasPermission((Player) sender, "wxw.admin.load");
 
         if (allowed) {
             if ((args != null) && (args.length == 1)) {
@@ -443,7 +443,7 @@ public class Wxw implements CommandExecutor {
     private static boolean doModifyWorld(final CommandSender sender, final String[] args) {
         boolean allowed = false;
         if (CommandUtilities.playerCheck(sender)) {
-            allowed = PermissionType.MODIFY.checkPermission((Player) sender);
+            allowed = CheckPerms.hasPermission((Player) sender, "wxw.admin.modify");
         } else {
             allowed = true;
         }
@@ -714,7 +714,7 @@ public class Wxw implements CommandExecutor {
     private static boolean doRemoveWorld(final CommandSender sender, final String[] args) {
         boolean allowed = false;
         if (CommandUtilities.playerCheck(sender)) {
-            allowed = PermissionType.REMOVE.checkPermission((Player) sender);
+            allowed = CheckPerms.hasPermission((Player) sender, "wxw.admin.remove");
         } else {
             allowed = true;
         }
@@ -744,7 +744,7 @@ public class Wxw implements CommandExecutor {
      * @return true, if successful
      */
     private static boolean doSetSpawnWorld(final Player player) {
-        if (PermissionType.SET_SPAWN.checkPermission(player)) {
+        if (CheckPerms.hasPermission(player, "wxw.admin.setspawn")) {
             final Location playerLocation = player.getLocation();
             final World playerWorld = playerLocation.getWorld();
             final WormholeWorld playerWormholeWorld = WorldManager.getWormholeWorld(playerWorld.getName());
@@ -776,7 +776,7 @@ public class Wxw implements CommandExecutor {
      * @return true, if successful
      */
     private static boolean doSpawnWorld(final Player player) {
-        if (PermissionType.SPAWN.checkPermission(player)) {
+        if (CheckPerms.hasPermission(player, "wxw.admin.spawn")) {
             final WormholeWorld wormholeWorld = WorldManager.getWorldFromPlayer(player);
             if (wormholeWorld != null) {
                 player.teleport(WorldManager.getSafeSpawnLocation(wormholeWorld, player));
